@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gerenciamento de Curso - Impulso Digital</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root{--cor-roxa-principal:#6A1B9A; --cor-laranja-destaque:#F57C00; --cor-branca:#FFFFFF;}
+    body{font-family:'Montserrat',sans-serif; margin:0; background:#F8F9FA; padding: 25px;}
+    .card{background:var(--cor-branca); padding:22px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+    h2 { color: var(--cor-roxa-principal); border-left: 4px solid var(--cor-laranja-destaque); padding-left: 10px; }
+    .btn-voltar { display:inline-block; margin-bottom: 20px; background: #6c757d; color: white; padding: 10px 15px; border-radius: 8px; text-decoration: none; font-weight: 600; }
+    .aluno-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; }
+    .aluno-progresso { width: 50%; }
+    progress { width: 100%; height: 20px; }
+  </style>
+  <script src="dados.js"></script> </head>
+<body>
+
+  <a href="Empresa.html" class="btn-voltar"><i class="fa-solid fa-arrow-left"></i> Voltar para o Painel</a>
+
+  <div class="card">
+    <h2 id="titulo-curso">Carregando curso...</h2>
+    <p>Acompanhe abaixo o progresso dos alunos inscritos neste treinamento.</p>
+    
+    <div id="lista-alunos-container">
+      </div>
+  </div>
+
+  <div class="card" style="margin-top: 20px;">
+      <h3>Gerar Relatório do Curso</h3>
+      <p>Exporte os dados de progresso dos alunos deste curso.</p>
+      <button onclick="gerarRelatorioCurso()" style="background-color: var(--cor-roxa-principal); color: var(--cor-branca); border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer;">Exportar CSV</button>
+  </div>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Pega o ID do curso da URL
+      const params = new URLSearchParams(window.location.search);
+      const cursoId = parseInt(params.get('cursoId')); // Converte para número
+
+      // 2. Encontra o curso na nossa base de dados
+      const curso = baseDeDados.cursos.find(c => c.id === cursoId);
+
+      if (curso) {
+        // 3. Atualiza o título da página
+        document.getElementById('titulo-curso').textContent = `Gerenciando: ${curso.nome}`;
+        
+        // 4. Mostra os alunos inscritos
+        const containerAlunos = document.getElementById('lista-alunos-container');
+        containerAlunos.innerHTML = ''; // Limpa o container
+
+        if (curso.inscritos.length > 0) {
+            curso.inscritos.forEach(aluno => {
+            const alunoHTML = `
+              <div class="aluno-item">
+                <span><i class="fa-solid fa-user"></i> ${aluno.nome}</span>
+                <div class="aluno-progresso">
+                  <progress value="${aluno.progresso}" max="100"></progress>
+                </div>
+                <span>${aluno.progresso}%</span>
+              </div>
+            `;
+            containerAlunos.innerHTML += alunoHTML;
+          });
+        } else {
+            containerAlunos.innerHTML = '<p>Nenhum aluno inscrito neste curso ainda.</p>';
+        }
+
+      } else {
+        document.getElementById('titulo-curso').textContent = "Curso não encontrado!";
+      }
+    });
+    
+    // Função de exemplo para gerar um relatório CSV simples
+    function gerarRelatorioCurso() {
+        const params = new URLSearchParams(window.location.search);
+        const cursoId = parseInt(params.get('cursoId'));
+        const curso = baseDeDados.cursos.find(c => c.id === cursoId);
+
+        if (!curso) { alert("Curso não encontrado!"); return; }
+
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += "Aluno,Progresso\n"; // Cabeçalho do CSV
+
+        curso.inscritos.forEach(aluno => {
+            csvContent += `${aluno.nome},${aluno.progresso}%\n`;
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `relatorio_${curso.nome.replace(/ /g, "_")}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        alert("Relatório gerado com sucesso!");
+    }
+  </script>
+
+</body>
+</html>
