@@ -85,5 +85,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function logout() {
     localStorage.removeItem('currentUser');
-    window.location.href = "indexTeste.html";
+    window.location.href = "index.html";
 }
