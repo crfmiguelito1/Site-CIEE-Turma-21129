@@ -62,7 +62,7 @@
             animation: fadeIn 0.4s ease-out;
         }
 
-        /* Dark Mode Styles (Seu código original + ajustes do quiz para contraste) */
+        /* Dark Mode Styles */
         .dark body { background-color: #111827; color: #d1d5db; }
         .dark .card, .dark .course-card { background-color: #1f2937; border: 1px solid #374151; }
         .dark h1, .dark h2, .dark h3, .dark h4, .dark p, .dark span, .dark h6 { color: #f9fafb; }
@@ -73,15 +73,12 @@
         .dark .border-gray-200 { border-color: #374151; }
         .dark .bg-white { background-color: #1f2937; }
         
-        /* Dark Mode Quiz Overrides (Texto claro, fundos escuros, cores de feedback ajustadas) */
+        /* Dark Mode Quiz Overrides */
         .dark .option-btn { background-color: #374151; color: #f9fafb; border-color: #4b5563; }
         .dark .option-btn:hover:not(.disabled) { background-color: #4b5563; }
-        /* Feedback Verde (Escuro) - Cores mais vibrantes para contraste */
         .dark .correct { border: 2px solid #34d399 !important; background-color: #065f46 !important; color: #d1fae5 !important; }
-        /* Feedback Vermelho (Escuro) - Cores mais vibrantes para contraste */
         .dark .incorrect { border: 2px solid #f87171 !important; background-color: #991b1b !important; color: #fee2e2 !important; }
         
-        /* Dark Mode para mensagens de feedback (cores de texto invertidas) */
         .dark .text-green-700 { color: #34d399 !important; }
         .dark .text-red-700 { color: #f87171 !important; }
         .dark .bg-yellow-100 { background-color: #374151; }
@@ -164,7 +161,7 @@
                     </div>
                     
                     <div class="text-center mt-12 pt-8 border-t border-gray-200">
-                        <img src="https://midias.agazeta.com.br/2021/04/09/aceitar-os-sintomas-do-transtorno-mental-sao-passos-iniciais-para-cuidar-da-mente-470494-article.jpg" alt="Imagem ilustrativa de produtividade" class="mx-auto my-4 rounded-lg shadow-md max-w-full md:max-w-2xl">
+                        <img src="https://midias.agazeta.com.br/2021/04/09/aceitar-os-sintomas-do-transtorno-mental-sao-passos-iniciais-para-cuidar-da-mente-470494-article.jpg" alt="Imagem ilustrativa de bem-estar" class="mx-auto my-4 rounded-lg shadow-md max-w-full md:max-w-2xl">
                         <div class="text-center mt-12 pt-8 border-t border-gray-200">
                             <div id="quiz-unlock-message" class="mb-4 p-4 bg-yellow-100 text-yellow-800 rounded-lg">
                                 <i class="fas fa-lock mr-2"></i>
@@ -186,11 +183,8 @@
             <div id="quiz-container" class="space-y-6">
                 </div>
             
-            <div id="quiz-navigation" class="flex justify-between mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                <button id="back-question-btn" class="inline-flex items-center justify-center px-6 py-2 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-gray-50 hover:bg-gray-200 dark:bg-gray-600 dark:text-gray-100 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors" style="display:none;">
-                    <i class="fas fa-arrow-left mr-2"></i> Voltar
-                </button>
-            </div>
+            <div id="quiz-navigation" class="flex justify-between mt-6 pt-4 border-t border-gray-200">
+                </div>
         </div>
         
         <div id="results-section" class="hidden course-card text-center">
@@ -211,46 +205,36 @@
         const quizSection = document.getElementById('quiz-section');
         const resultsSection = document.getElementById('results-section');
         const quizContainer = document.getElementById('quiz-container');
+        const quizNavigation = document.getElementById('quiz-navigation');
         const startQuizBtn = document.getElementById('start-quiz-btn');
         const quizUnlockMessage = document.getElementById('quiz-unlock-message');
-        const backQuestionBtn = document.getElementById('back-question-btn');
 
-        // Abas e Painéis
         const tabButtons = document.querySelectorAll('.tab-button');
         const readingPanel = document.getElementById('reading-panel');
         const wellnessPanel = document.getElementById('wellness-panel');
         
-        // Barras de Progresso
         const progressBarReading = document.getElementById('progressBarReading');
         const progressBarWellness = document.getElementById('progressBarWellness');
-
-        // Botões de Navegação
         const nextToWellnessBtn = document.getElementById('next-to-wellness-btn');
 
-        // Variáveis de controle
-        let isQuizUnlocked = false;
-        let score = 0;
-        let currentQuestionIndex = 0;
-        let userAnswers = []; // Array para armazenar respostas e permitir a navegação
-
-        // --- DADOS DO QUIZ (8 Perguntas) ---
+        // --- DADOS DO QUIZ ---
         const quizQuestions = [
             { 
                 question: "1. De acordo com o material, qual é a principal definição de ser produtivo?", 
                 options: ["Aumentar a carga de trabalho para entregar mais resultados", "Fazer muitas coisas ao mesmo tempo para maximizar a produção imediata", "Realizar tarefas com mais eficiência, aproveitando melhor o tempo e os recursos, sem abrir mão da qualidade", "Delegar o máximo de tarefas possível para se concentrar apenas nas mais difíceis"], 
-                correct: "Realizar tarefas com eficiência, aproveitando melhor o tempo e os recursos, sem abrir mão da qualidade.", 
+                correct: "Realizar tarefas com mais eficiência, aproveitando melhor o tempo e os recursos, sem abrir mão da qualidade", 
                 explanation: "Ser produtivo é fazer mais com qualidade, otimizando tempo e recursos." 
             },
             { 
                 question: "2. Qual das seguintes práticas é recomendada pelo material na dica sobre 'Organizar sua rotina'?", 
                 options: ["Realizar várias tarefas simultaneamente para otimizar o tempo", "Reservar o dia para avaliar os resultados e identificar melhorias", "Dar prioridade a uma tarefa, concluí-la e só então seguir para a próxima", "Utilizar softwares de gestão e cronômetros de produtividade."],
-                correct: "Evitar fazer muitas coisas ao mesmo tempo (multitarefa)", 
+                correct: "Dar prioridade a uma tarefa, concluí-la e só então seguir para a próxima", 
                 explanation: "A dica é evitar multitarefa: priorizar uma tarefa, concluir e seguir para a próxima." 
             },
             { 
                 question: "3. A dica de produtividade 'Aprimore sempre' sugere que o profissional deve reservar momentos para quê?", 
                 options: ["Buscar aprimoramento apenas quando houver desperdício ou insatisfação", "Avaliar seus resultados e identificar o que pode ser melhorado", "Anotar compromissos e usar listas de tarefas", "Manter um espaço de trabalho totalmente organizado e agradável"], 
-                correct: "Avaliar seus resultados e identificar o que pode ser melhorado.", 
+                correct: "Avaliar seus resultados e identificar o que pode ser melhorado", 
                 explanation: "A dica sugere que o profissional deve reservar momentos para avaliar e identificar melhorias." 
             },
             { 
@@ -261,155 +245,136 @@
             },
             { 
                 question: "5. De acordo com o texto, o bem-estar corporativo se refere a qual tipo de equilíbrio experimentado pelos trabalhadores?", 
-                options: ["Apenas satisfação e motivação profissional", "Equilíbrio financeiro e espiritual na vida pessoal", "Equilíbrio entre salário, benefícios e tempo de descanso", "Equilíbrio físico, mental e emocional no ambiente laboral."], 
-                correct: "Equilíbrio físico, mental e emocional no ambiente laboral.", 
+                options: ["Apenas satisfação e motivação profissional", "Equilíbrio financeiro e espiritual na vida pessoal", "Equilíbrio entre salário, benefícios e tempo de descanso", "Equilíbrio físico, mental e emocional no ambiente laboral"], 
+                correct: "Equilíbrio físico, mental e emocional no ambiente laboral", 
                 explanation: "O bem-estar corporativo abrange o equilíbrio físico, mental e emocional no ambiente de trabalho." 
             },
             { 
                 question: "6. Qual dado estatístico é apresentado no texto para reforçar a importância do bem-estar para o colaborador?", 
-                options: ["50% dos colaboradores consideram o bem-estar mais importante que o salário", "Apenas 15% dos colaboradores consideram o bem-estar tão importante quanto o salário", "83% dos colaboradores sentem-se engajados devido ao bom clima", "85% dos colaboradores afirmam que o bem-estar é um fator decisivo para permanecer no emprego."], 
-                correct: "Saúde Integral", 
-                explanation: "A Saúde Integral abrange hábitos benéficos e o clima que estimula o bem-estar psicológico e a gestão do estresse." 
+                options: ["50% dos colaboradores consideram o bem-estar mais importante que o salário", "Apenas 15% dos colaboradores consideram o bem-estar tão importante quanto o salário", "83% dos colaboradores sentem-se engajados devido ao bom clima", "85% dos colaboradores afirmam que o bem-estar é um fator decisivo para permanecer no emprego"], 
+                correct: "85% dos colaboradores afirmam que o bem-estar é um fator decisivo para permanecer no emprego", 
+                explanation: "O texto cita que 85% dos colaboradores afirmam que o bem-estar é um fator decisivo para continuar na empresa." 
             },
             { 
                 question: "7. No aspecto 'Saúde Integral', o que o colaborador deve valorizar e priorizar, além dos hábitos benéficos à saúde?", 
-                options: ["Utilizar a comunicação aberta para expressar opiniões e preocupações", "Contribuir para um ambiente respeitoso e inclusivo", "Buscar oportunidades de crescimento e aprendizado constantes", "O clima organizacional que estimula o bem-estar psicológico e a gestão do estresse."], 
-                correct: "Buscar oportunidades de crescimento e aprendizado constantes.", 
-                explanation: "No aspecto 'Saúde Integral', o colaborador deve valorizar e priorizar a busca por oportunidades de crescimento e aprendizado constantes." 
+                options: ["Utilizar a comunicação aberta para expressar opiniões e preocupações", "Contribuir para um ambiente respeitoso e inclusivo", "Buscar oportunidades de crescimento e aprendizado constantes", "O clima organizacional que estimula o bem-estar psicológico e a gestão do estresse"], 
+                correct: "O clima organizacional que estimula o bem-estar psicológico e a gestão do estresse", 
+                explanation: "No aspecto 'Saúde Integral', deve-se valorizar o clima organizacional que estimula o bem-estar psicológico." 
             },
             {
                 question: "8. Qual é o papel da 'Participação Ativa' do colaborador, de acordo com o texto, para fortalecer o senso de pertencimento?", 
-                options: ["Focar apenas na gestão do estresse individual", "Incentivar o trabalho em equipe por meio de atividades de socialização e projetos conjuntos.", "Delegar tarefas para aumentar o tempo de descanso.", "Exigir que a empresa promova um aumento salarial e melhores benefícios."], 
-                correct: "Incentivar o trabalho em equipe por meio de atividades de socialização e projetos conjuntos.", 
-                explanation: "A 'Participação Ativa' envolve incentivar o trabalho em equipe por meio de atividades de socialização e projetos conjuntos." 
-            },
-           
+                options: ["Focar apenas na gestão do estresse individual", "Incentivar o trabalho em equipe por meio de atividades de socialização e projetos conjuntos", "Delegar tarefas para aumentar o tempo de descanso", "Exigir que a empresa promova um aumento salarial e melhores benefícios"], 
+                correct: "Incentivar o trabalho em equipe por meio de atividades de socialização e projetos conjuntos", 
+                explanation: "A 'Participação Ativa' envolve incentivar o trabalho em equipe através de atividades e projetos conjuntos." 
+            }
         ];
+        
+        // --- VARIÁVEIS DE CONTROLE ---
+        let isQuizUnlocked = false;
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(quizQuestions.length).fill(null);
+        let score = 0;
         const totalQuestions = quizQuestions.length;
-
 
         // --- FUNÇÕES DO QUIZ ---
 
-        // Função para recalcular o placar total
         function calculateScore() {
-            let newScore = 0;
-            userAnswers.forEach((answer, index) => {
-                
-            });
-            score = newScore;
+            score = userAnswers.filter((answer, index) => answer === quizQuestions[index].correct).length;
         }
 
-        // Função para renderizar a pergunta atual com animação
         function renderQuestion() {
-            // Se terminou as perguntas, mostra os resultados
             if (currentQuestionIndex >= totalQuestions) {
-                calculateScore();
                 showResults();
                 return;
             }
 
-            quizContainer.innerHTML = ''; // Limpa o container
+            quizContainer.innerHTML = '';
+            quizNavigation.innerHTML = '';
             const q = quizQuestions[currentQuestionIndex];
-            const hasAnswered = userAnswers[currentQuestionIndex] !== null && userAnswers[currentQuestionIndex] !== undefined;
+            const hasAnswered = userAnswers[currentQuestionIndex] !== null;
 
             const questionElement = document.createElement('div');
-            // Mantém o estilo de card do quiz e aplica a animação
-            questionElement.classList.add('fade-in', 'bg-white', 'p-6', 'rounded-lg', 'shadow-md', 'border', 'border-gray-200', 'dark:bg-gray-800', 'dark:border-gray-700'); 
+            questionElement.classList.add('fade-in');
             
-            let output = `<h4 class="text-xl font-bold mb-6 text-gray-800 dark:text-gray-100">${q.question}</h4><div class="options-container space-y-3">`;
-
-            // Cria as opções
+            let optionsHTML = '';
             q.options.forEach(option => {
-                const isCorrect = (option === q.correct) ? 'true' : 'false';
-                const isSelected = option === userAnswers[currentQuestionIndex];
                 let classes = "option-btn block w-full text-left px-6 py-3 rounded-lg font-medium";
-
-                // Se já foi respondida, aplica os estilos de feedback e desativa
                 if (hasAnswered) {
                     classes += ' disabled';
-                    if (isSelected) {
-                        classes += isCorrect ? ' correct' : ' incorrect';
-                    } else if (isCorrect) {
+                    if (option === q.correct) {
                         classes += ' correct';
+                    } else if (option === userAnswers[currentQuestionIndex]) {
+                        classes += ' incorrect';
                     }
                 }
-
-                output += `
-                    <button 
-                        class="${classes}"
-                        data-answer-text="${option}" 
-                        data-correct="${isCorrect}">
-                        ${option}
-                    </button>
-                `;
+                optionsHTML += `<button class="${classes}" data-answer-text="${option}">${option}</button>`;
             });
 
-            output += `</div><div id="feedback-${currentQuestionIndex}" class="mt-4 text-center font-bold">`;
-
-            // Se já foi respondida, mostra o feedback textual
+            let feedbackHTML = '';
             if (hasAnswered) {
                 const isCorrect = userAnswers[currentQuestionIndex] === q.correct;
                 const colorClass = isCorrect ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400';
                 const icon = isCorrect ? '✔️' : '❌';
-                output += `<p class="${colorClass}">${icon} ${isCorrect ? 'Resposta correta!' : 'Resposta incorreta.'} ${q.explanation}</p>`;
+                feedbackHTML = `<p class="${colorClass}">${icon} ${q.explanation}</p>`;
             }
 
-            output += `</div>`;
-            questionElement.innerHTML = output;
+            questionElement.innerHTML = `
+                <h4 class="text-xl font-bold mb-6 text-gray-800 dark:text-gray-100">${q.question}</h4>
+                <div class="options-container space-y-3">${optionsHTML}</div>
+                <div class="mt-4 text-center font-bold">${feedbackHTML}</div>
+            `;
             quizContainer.appendChild(questionElement);
-            
-            // Adiciona o event listener às opções (se ainda não respondidas)
+
             if (!hasAnswered) {
-                document.querySelectorAll('.option-btn').forEach(option => {
-                    option.addEventListener('click', checkAnswer);
+                document.querySelectorAll('.option-btn').forEach(btn => {
+                    btn.addEventListener('click', checkAnswer);
                 });
             }
 
-            // Exibe/oculta o botão "Voltar"
-            if (currentQuestionIndex > 0) {
-                backQuestionBtn.style.display = 'inline-flex';
-            } else {
-                backQuestionBtn.style.display = 'none';
-            }
-            
-            window.scrollTo(0, quizSection.offsetTop); 
+            renderNavigationButtons();
+            window.scrollTo(0, quizSection.offsetTop);
         }
 
-        // Função para checar a resposta e dar feedback
         function checkAnswer(event) {
-            const selectedOption = event.currentTarget;
-            const parentOptionsContainer = selectedOption.parentElement;
-            const allOptions = parentOptionsContainer.querySelectorAll('.option-btn');
-            const feedbackDiv = document.getElementById(`feedback-${currentQuestionIndex}`);
-            const q = quizQuestions[currentQuestionIndex];
-
-            const answerText = selectedOption.getAttribute('data-answer-text');
-            const isCorrect = selectedOption.getAttribute('data-correct') === 'true';
-
-            // Armazena a resposta
-            userAnswers[currentQuestionIndex] = answerText;
-
-            // 1. Aplica o feedback visual e desativa
-            allOptions.forEach(opt => opt.classList.add('disabled'));
-
-            if (isCorrect) {
-                selectedOption.classList.add('correct');
-                feedbackDiv.innerHTML = `<p class="text-green-700 dark:text-green-400">✔️ Resposta correta! ${q.explanation}</p>`;
-            } else {
-                selectedOption.classList.add('incorrect');
-                parentOptionsContainer.querySelector('[data-correct="true"]').classList.add('correct');
-                feedbackDiv.innerHTML = `<p class="text-red-700 dark:text-red-400">❌ Resposta incorreta. A correta está destacada em verde.</p>`;
-            }
-
-            // 2. Avança para a próxima pergunta após um pequeno atraso
-            setTimeout(() => {
-                currentQuestionIndex++;
-                renderQuestion();
-            }, 2500); 
+            const selectedOptionText = event.currentTarget.getAttribute('data-answer-text');
+            userAnswers[currentQuestionIndex] = selectedOptionText;
+            renderQuestion(); // Re-renderiza a questão com o feedback
         }
 
-        // Função para exibir os resultados finais
+        function renderNavigationButtons() {
+            const hasAnswered = userAnswers[currentQuestionIndex] !== null;
+            const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
+
+            // Botão Voltar
+            const backButton = document.createElement('button');
+            backButton.innerHTML = `<i class="fas fa-arrow-left mr-2"></i> Voltar`;
+            backButton.className = "inline-flex items-center justify-center px-6 py-2 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-gray-50 hover:bg-gray-200 dark:bg-gray-600 dark:text-gray-100 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors";
+            backButton.style.visibility = currentQuestionIndex > 0 ? 'visible' : 'hidden';
+            backButton.onclick = () => {
+                currentQuestionIndex--;
+                renderQuestion();
+            };
+
+            // Botão Avançar / Finalizar
+            const nextButton = document.createElement('button');
+            nextButton.innerHTML = isLastQuestion ? `Finalizar <i class="fas fa-check-circle ml-2"></i>` : `Avançar <i class="fas fa-arrow-right ml-2"></i>`;
+            nextButton.className = "inline-flex items-center justify-center px-6 py-2 border border-transparent text-base font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 transition-colors";
+            nextButton.disabled = !hasAnswered;
+            nextButton.onclick = () => {
+                if (isLastQuestion) {
+                    showResults();
+                } else {
+                    currentQuestionIndex++;
+                    renderQuestion();
+                }
+            };
+            
+            quizNavigation.appendChild(backButton);
+            quizNavigation.appendChild(nextButton);
+        }
+
         function showResults() {
+            calculateScore();
             const scoreDisplay = document.getElementById('score-display');
             const balanceMessage = document.getElementById('balance-message');
 
@@ -417,41 +382,26 @@
             resultsSection.classList.remove('hidden');
 
             const percentage = (score / totalQuestions) * 100;
-            
-            scoreDisplay.innerHTML = `${score} / ${totalQuestions}`;
-
+            scoreDisplay.textContent = `${score} / ${totalQuestions}`;
             scoreDisplay.classList.remove('text-green-600', 'text-yellow-600', 'text-red-600');
 
             if (percentage === 100) {
-                balanceMessage.innerHTML = 'Parabéns! Você demonstrou total domínio sobre Produtividade e Bem-Estar. Excelente trabalho!';
+                balanceMessage.textContent = 'Parabéns! Você demonstrou total domínio sobre Produtividade e Bem-Estar. Excelente trabalho!';
                 scoreDisplay.classList.add('text-green-600');
-            } else if (percentage >= 75) { 
-                balanceMessage.innerHTML = 'Ótimo resultado! Você absorveu a maior parte do conteúdo. Continue aprimorando seu foco e bem-estar.';
+            } else if (percentage >= 75) {
+                balanceMessage.textContent = 'Ótimo resultado! Você absorveu a maior parte do conteúdo. Continue aprimorando seu foco e bem-estar.';
                 scoreDisplay.classList.add('text-yellow-600');
             } else {
-                balanceMessage.innerHTML = 'Você demonstrou conhecimento, mas pode revisar os módulos para reforçar os conceitos de Produtividade e Bem-Estar. Lembre-se, o sucesso está no aprendizado contínuo!';
+                balanceMessage.textContent = 'Você demonstrou conhecimento, mas pode revisar os módulos para reforçar os conceitos. Lembre-se, o sucesso está no aprendizado contínuo!';
                 scoreDisplay.classList.add('text-red-600');
             }
-            window.scrollTo(0, resultsSection.offsetTop); 
+            window.scrollTo(0, resultsSection.offsetTop);
         }
-        
-        // --- FUNÇÕES DE NAVEGAÇÃO / PROGRESO ---
 
-        // Listener para o botão de voltar
-        backQuestionBtn.addEventListener('click', () => {
-            if (currentQuestionIndex > 0) {
-                currentQuestionIndex--;
-                // Remove a resposta do array para que a pergunta volte ao estado original
-                // Isso permite que o usuário responda novamente, se necessário
-                // userAnswers[currentQuestionIndex] = null; 
-                renderQuestion();
-            }
-        });
+        // --- FUNÇÕES DE NAVEGAÇÃO / PROGRESO (Originais mantidas) ---
 
-        // Função para trocar de aba
         function switchTab(clickedTabId) {
             tabButtons.forEach(button => button.classList.remove('active-tab'));
-            
             if (clickedTabId === 'wellness-tab') {
                 document.getElementById('wellness-tab').classList.add('active-tab');
                 readingPanel.classList.add('hidden');
@@ -461,33 +411,25 @@
                 wellnessPanel.classList.add('hidden');
                 readingPanel.classList.remove('hidden');
             }
-            window.scrollTo(0, 0); 
+            window.scrollTo(0, 0);
         }
 
-        // Função genérica para atualizar o progresso da aba ativa
         function updateActiveTabProgress() {
             const scrollPosition = window.scrollY;
             const clientHeight = document.documentElement.clientHeight;
             const trainingHeight = trainingSection.offsetHeight;
-            
-            // Calcula a rolagem dentro da seção de treinamento
             const trainingScrollTop = scrollPosition - trainingSection.offsetTop;
             const maxTrainingScroll = trainingHeight > clientHeight ? trainingHeight - clientHeight : 1;
             const progressInTraining = Math.min(Math.max(0, trainingScrollTop) / maxTrainingScroll, 1) * 100;
 
             if (!readingPanel.classList.contains('hidden')) {
-                progressBarReading.style.width = Math.min(progressInTraining, 100) + '%'; 
-            } 
-            else if (!wellnessPanel.classList.contains('hidden') && !isQuizUnlocked) {
+                progressBarReading.style.width = Math.min(progressInTraining, 100) + '%';
+            } else if (!wellnessPanel.classList.contains('hidden') && !isQuizUnlocked) {
                 progressBarWellness.style.width = Math.min(progressInTraining, 100) + '%';
-                
-                // Desbloqueio do quiz: quando a barra de progresso do Bem-Estar atinge 95%
-                if (Math.min(progressInTraining, 100) >= 95) { 
+                if (Math.min(progressInTraining, 100) >= 95) {
                     isQuizUnlocked = true;
-                    
                     startQuizBtn.disabled = false;
                     startQuizBtn.textContent = 'Estou pronto para o teste!';
-                    startQuizBtn.classList.remove('bg-purple-600', 'hover:bg-purple-700', 'bg-gray-700'); 
                     startQuizBtn.classList.add('bg-green-600', 'hover:bg-green-700');
                     quizUnlockMessage.style.display = 'none';
                 }
@@ -496,26 +438,19 @@
 
         // --- EVENT LISTENERS ---
 
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => switchTab(button.id));
-        });
-        
-        nextToWellnessBtn.addEventListener('click', () => {
-            switchTab('wellness-tab');
-        });
-
+        tabButtons.forEach(button => button.addEventListener('click', () => switchTab(button.id)));
+        nextToWellnessBtn.addEventListener('click', () => switchTab('wellness-tab'));
         startQuizBtn.addEventListener('click', () => {
             if (isQuizUnlocked) {
                 trainingSection.classList.add('hidden');
                 quizSection.classList.remove('hidden');
-                currentQuestionIndex = 0; // Reseta o índice
-                score = 0; // Reseta o placar
-                userAnswers = new Array(totalQuestions).fill(null); // Limpa as respostas
-                renderQuestion(); 
+                currentQuestionIndex = 0;
+                userAnswers.fill(null);
+                score = 0;
+                renderQuestion();
             }
         });
-        
-        // Otimizador de evento de scroll
+
         function throttle(func, limit) {
             let inThrottle;
             return function(...args) {
@@ -528,14 +463,12 @@
         }
         window.addEventListener('scroll', throttle(updateActiveTabProgress, 100));
 
-        // Lógica do link de "Voltar" (baseado no localStorage)
         const backLink = document.getElementById('back-to-dashboard-link');
         if (backLink) {
             const userRole = localStorage.getItem('userRole');
             backLink.href = (userRole === 'Empresa') ? "Empresa.html" : "painel.html";
         }
 
-        // Configura o link de Finalizar Treinamento
         const finishTrainingLink = document.getElementById('finish-training-link');
         if (finishTrainingLink) {
             const userRole = localStorage.getItem('userRole');
