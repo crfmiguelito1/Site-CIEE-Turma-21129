@@ -115,7 +115,7 @@
             <div class="curso-item" data-course-name="Produtividade"><i class="fa-solid fa-bolt"></i><span><strong>Produtividade</strong> – Nível: Intermediário – 12h</span><button class="btn-laranja" onclick="handleCourseAction('Produtividade', this)">Inscrever-se</button></div>
             <div class="curso-item" data-course-name="Aprendizado Contínuo"><i class="fa-solid fa-book-open"></i><span><strong>Aprendizado Contínuo</strong> – Nível: Iniciante – 8h</span><button class="btn-laranja" onclick="handleCourseAction('Aprendizado Contínuo', this)">Inscrever-se</button></div>
             <div class="curso-item" data-course-name="Reduzir Rotatividade"><i class="fa-solid fa-users"></i><span><strong>Reduzir Rotatividade</strong> – Nível: Intermediário – 10h</span><button class="btn-laranja" onclick="handleCourseAction('Reduzir Rotatividade', this)">Inscrever-se</button></div>
-            <div class="curso-item" data-course-name="Evitar Falhas"><i class="fa-solid fa-triangle-exclamation"></i><span><strong>Evitar Falhas</strong> – Nível: Avançado – 14h</span><button class="btn-laranja" onclick="handleCourseAction('Evitar Falhas', this)">Inscrever-se</button></div>
+
         </section>
 
         <section id="progresso" class="content-section dashboard-grid hidden">
@@ -138,7 +138,7 @@
     </div>
 
     <script>
-        const infoCursos = { "Capacitação": { icone: "fa-solid fa-graduation-cap", url: "Capacitação.html" }, "Padronização de Processos": { icone: "fa-solid fa-gear", url: "Padronização de Processos.html" }, "Adaptação à Tecnologia": { icone: "fa-solid fa-computer", url: "Adaptação à Tecnologia.html" }, "Produtividade": { icone: "fa-solid fa-bolt", url: "Produtividade.html" }, "Aprendizado Contínuo": { icone: "fa-solid fa-book-open", url: "Aprendizado Contínuo.html" }, "Reduzir Rotatividade": { icone: "fa-solid fa-users", url: "Reduzir Rotatividade.html" }, "Evitar Falhas": { icone: "fa-solid fa-triangle-exclamation", url: "Evitar Falhas.html" } };
+        const infoCursos = { "Capacitação": { icone: "fa-solid fa-graduation-cap", url: "Capacitação.html" }, "Padronização de Processos": { icone: "fa-solid fa-gear", url: "Padronização de Processos.html" }, "Adaptação à Tecnologia": { icone: "fa-solid fa-computer", url: "Adaptação à Tecnologia.html" }, "Produtividade": { icone: "fa-solid fa-bolt", url: "Produtividade.html" }, "Aprendizado Contínuo": { icone: "fa-solid fa-book-open", url: "Aprendizado Contínuo.html" }, "Reduzir Rotatividade": { icone: "fa-solid fa-users", url: "Reduzir Rotatividade.html" }, };
         let inscritos = [];
         const totalDeCursos = 7;
         function carregarInscricoes() { const d = localStorage.getItem('cursosInscritos'); return d ? JSON.parse(d) : []; }

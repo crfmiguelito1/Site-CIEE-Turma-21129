@@ -35,7 +35,7 @@
             transition: all 0.2s ease;
             border: 2px solid #e5e7eb;
             background-color: #f9fafb;
-            color: #374151; /* Texto escuro no modo claro */
+            color: #374151;
         }
         .option-btn:hover:not(.disabled) { 
             transform: translateY(-2px);
@@ -48,9 +48,7 @@
             transform: none !important;
             box-shadow: none !important;
         }
-        /* Feedback Verde (Claro) */
         .correct { border: 2px solid #10b981 !important; background-color: #d1fae5 !important; color: #065f46 !important; }
-        /* Feedback Vermelho (Claro) */
         .incorrect { border: 2px solid #ef4444 !important; background-color: #fee2e2 !important; color: #991b1b !important; }
         
         /* ANIMAÇÃO DE TRANSIÇÃO (FADE) */
@@ -79,10 +77,16 @@
         .dark .correct { border: 2px solid #34d399 !important; background-color: #065f46 !important; color: #d1fae5 !important; }
         .dark .incorrect { border: 2px solid #f87171 !important; background-color: #991b1b !important; color: #fee2e2 !important; }
         
-        .dark .text-green-700 { color: #34d399 !important; }
-        .dark .text-red-700 { color: #f87171 !important; }
         .dark .bg-yellow-100 { background-color: #374151; }
         .dark .text-yellow-800 { color: #facc15; }
+
+        /* ✅ CORREÇÃO DEFINITIVA PARA O TEXTO DA PERGUNTA DO QUIZ */
+        #quiz-container h4 {
+            color: #1f2937; /* Cor escura para o modo claro */
+        }
+        .dark #quiz-container h4 {
+            color: #f9fafb; /* Cor clara para o modo escuro */
+        }
     </style>
     <script>
         if (localStorage.getItem('theme') === 'dark') {
@@ -313,13 +317,13 @@
             let feedbackHTML = '';
             if (hasAnswered) {
                 const isCorrect = userAnswers[currentQuestionIndex] === q.correct;
-                const colorClass = isCorrect ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400';
+                const colorClass = isCorrect ? 'text-green-800 dark:text-green-400' : 'text-red-800 dark:text-red-400';
                 const icon = isCorrect ? '✔️' : '❌';
                 feedbackHTML = `<p class="${colorClass}">${icon} ${q.explanation}</p>`;
             }
 
             questionElement.innerHTML = `
-                <h4 class="text-xl font-bold mb-6 text-gray-800 dark:text-gray-100">${q.question}</h4>
+                <h4 class="text-xl font-bold mb-6">${q.question}</h4>
                 <div class="options-container space-y-3">${optionsHTML}</div>
                 <div class="mt-4 text-center font-bold">${feedbackHTML}</div>
             `;
@@ -338,14 +342,13 @@
         function checkAnswer(event) {
             const selectedOptionText = event.currentTarget.getAttribute('data-answer-text');
             userAnswers[currentQuestionIndex] = selectedOptionText;
-            renderQuestion(); // Re-renderiza a questão com o feedback
+            renderQuestion();
         }
 
         function renderNavigationButtons() {
             const hasAnswered = userAnswers[currentQuestionIndex] !== null;
             const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
 
-            // Botão Voltar
             const backButton = document.createElement('button');
             backButton.innerHTML = `<i class="fas fa-arrow-left mr-2"></i> Voltar`;
             backButton.className = "inline-flex items-center justify-center px-6 py-2 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-gray-50 hover:bg-gray-200 dark:bg-gray-600 dark:text-gray-100 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors";
@@ -355,7 +358,6 @@
                 renderQuestion();
             };
 
-            // Botão Avançar / Finalizar
             const nextButton = document.createElement('button');
             nextButton.innerHTML = isLastQuestion ? `Finalizar <i class="fas fa-check-circle ml-2"></i>` : `Avançar <i class="fas fa-arrow-right ml-2"></i>`;
             nextButton.className = "inline-flex items-center justify-center px-6 py-2 border border-transparent text-base font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 transition-colors";
