@@ -2,7 +2,6 @@
    1. GERAL E VARIÁVEIS DE TEMA
    ================================= */
 :root {
-  /* Variáveis de tema existentes */
   --purple: #6A1B9A;
   --purple-dark: #4A148C;
   --purple-light: #E1BEE7;
@@ -21,14 +20,10 @@
   --success: #28a745;
   --info: #17a2b8;
   --danger: #dc3545;
-
-  /* Variáveis de layout e transição */
   --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
   --shadow-md: 0 6px 18px rgba(0,0,0,0.08);
   --border-radius: 12px;
-  --transition: all 0.3s ease-in-out; /* ATUALIZADO: Transição mais suave */
-  
-  /* ATUALIZADO: Nova variável para acessibilidade */
+  --transition: all 0.3s ease-in-out;
   --focus-ring-color: hsl(27, 100%, 60%);
 }
 
@@ -62,7 +57,7 @@ body {
   background-color: var(--background-light);
   color: var(--text-primary);
   transition: background-color var(--transition), color var(--transition);
-  -webkit-font-smoothing: antialiased; /* ATUALIZADO: Melhora a renderização de fontes */
+  -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
@@ -70,122 +65,165 @@ body {
    4. LAYOUT PRINCIPAL E CARDS
    ================================= */
 .main {
-    flex: 1;
-    padding: 24px;
-    overflow-y: auto;
-    max-width: 1200px;
-    margin: 0 auto;
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .grid-settings {
-    display: grid;
-    gap: 24px;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
 .card {
-    background: var(--card-bg-light);
-    padding: 24px; /* ATUALIZADO: Maior espaçamento interno */
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--border-light);
-    transition: transform var(--transition), box-shadow var(--transition); /* ATUALIZADO: Transição mais específica */
+  background: var(--card-bg-light);
+  padding: 24px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
+  transition: transform var(--transition), box-shadow var(--transition);
 }
 
-/* ATUALIZADO: Efeito de "levantar" o card ao passar o mouse */
 .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
 .card h4 {
-    color: var(--purple);
-    margin-bottom: 16px; /* ATUALIZADO: Mais espaço abaixo do título */
+  color: var(--purple);
+  margin-bottom: 16px;
 }
 
 /* =================================
    5. BOTÕES
    ================================= */
 .btn {
-    background: var(--orange);
-    color: var(--white);
-    border: none;
-    padding: 12px 20px; /* ATUALIZADO: Botão ligeiramente maior */
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 14px;
-    transition: var(--transition);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    text-decoration: none; /* Garante que links estilizados como botões não tenham sublinhado */
-    outline: none; /* Remove o outline padrão */
+  background: var(--orange);
+  color: var(--white);
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  outline: none;
 }
 
 .btn:hover {
-    filter: brightness(1.1);
-    transform: translateY(-2px);
+  filter: brightness(1.1);
+  transform: translateY(-2px);
 }
 
-/* ATUALIZADO: Foco visível apenas para navegação com teclado (acessibilidade) */
 .btn:focus-visible {
-    box-shadow: 0 0 0 3px var(--background-light), 0 0 0 5px var(--focus-ring-color);
+  box-shadow: 0 0 0 3px var(--background-light), 0 0 0 5px var(--focus-ring-color);
 }
 
 /* =================================
-   6. NOVO: ESTILOS DE FORMULÁRIO
+   6. FORMULÁRIOS
    ================================= */
 .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
-    font-weight: 600;
-    font-size: 14px;
-    color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-secondary);
 }
 
 .form-group input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid var(--border-light);
-    background-color: var(--background-light); /* Fundo sutil para o input */
-    color: var(--text-primary);
-    font-size: 16px;
-    transition: var(--transition);
-    outline: none;
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-light);
+  background-color: var(--background-light);
+  color: var(--text-primary);
+  font-size: 16px;
+  transition: var(--transition);
+  outline: none;
 }
 
 .form-group input:focus-visible {
-    border-color: var(--orange);
-    box-shadow: 0 0 0 3px var(--background-light), 0 0 0 5px var(--focus-ring-color);
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px var(--background-light), 0 0 0 5px var(--focus-ring-color);
 }
 
-
 /* =================================
-   7. NOVO: RESPONSIVIDADE PARA CELULARES
+   7. RESPONSIVIDADE
    ================================= */
 @media (max-width: 768px) {
-    body {
-        font-size: 15px; /* Ajusta o tamanho da fonte base */
-    }
+  body {
+    font-size: 15px;
+  }
+  .main {
+    padding: 16px;
+  }
+  .card {
+    padding: 20px;
+  }
+  .btn {
+    padding: 12px 18px;
+    font-size: 13px;
+  }
+}
 
-    .main {
-        padding: 16px; /* Menor espaçamento em telas pequenas */
-    }
+/* =================================
+   8. LOGO APRIMORE + FOGUETE
+   ================================= */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: "Poppins", sans-serif;
+  font-size: 2rem;
+  font-weight: 100;
+  color: var(--purple-dark);
+}
 
-    .card {
-        padding: 20px;
-    }
-    
-    .btn {
-        padding: 12px 18px;
-        font-size: 13px;
-    }
+.icon-foguete {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 3px rgba(0,0,0,0.2));
+  transition: transform 0.4s ease;
+}
+
+.icon-foguete:hover {
+  transform: translateY(-4px) scale(1.05);
+}
+
+/* =================================
+   9. FOGUETE FLUTUANTE (ANIMAÇÃO)
+   ================================= */
+.foguete-flutuante {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  z-index: 9999;
+  pointer-events: none;
+  animation: flutuar 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 5px rgba(0,0,0,0.3));
+}
+
+@keyframes flutuar {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
