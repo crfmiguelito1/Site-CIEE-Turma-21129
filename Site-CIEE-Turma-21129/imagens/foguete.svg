@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2020/svg" viewBox="0 0 100 100">
+    <defs>
+        <linearGradient id="glowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#00BFFF;stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:#FFD700;stop-opacity:1"/>
+        </linearGradient>
+        <filter id="neonGlow">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"></feGaussianBlur>
+            <feMerge>
+                <feMergeNode in="blur"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g style="filter:url(#neonGlow);">
+        <path d="M50 0 C45 15 40 30 40 45 L40 70 A10 10 0 0 0 50 80 A10 10 0 0 0 60 70 L60 45 C60 30 55 15 50 0 Z" fill="#D3D3D3" stroke="#696969" stroke-width="1.5"/>
+        <circle cx="50" cy="30" r="8" fill="#ADD8E6" stroke="#808080" stroke-width="1.5"/>
+        <path d="M40 50 L30 65 L40 70 Z" fill="#6495ED" stroke="#696969" stroke-width="1.5"/>
+        <path d="M60 50 L70 65 L60 70 Z" fill="#6495ED" stroke="#696969" stroke-width="1.5"/>
+        <path d="M48 80 C50 90 52 80 50 100 C48 80 48 90 48 80 Z" fill="url(#glowGradient)"/>
+        <path d="M45 85 C47 95 49 85 47 100 C45 85 45 95 45 85 Z" fill="url(#glowGradient)"/>
+        <path d="M55 85 C53 95 51 85 53 100 C55 85 55 95 55 85 Z" fill="url(#glowGradient)"/>
+        <path d="M35 70 L35 85 L30 80 L35 70 Z" fill="#ADD8E6"/>
+        <path d="M35 80 L35 95 L30 90 L35 80 Z" fill="#ADD8E6"/>
+        <path d="M35 90 L35 105 L30 100 L35 90 Z" fill="#ADD8E6"/>
+
+        <path d="M65 70 L65 85 L70 80 L65 70 Z" fill="#ADD8E6"/>
+        <path d="M65 80 L65 95 L70 90 L65 80 Z" fill="#ADD8E6"/>
+        <path d="M65 90 L65 105 L70 100 L65 90 Z" fill="#ADD8E6"/>
+        <circle cx="25" cy="20" r="3" fill="#ADD8E6"/>
+        <rect x="70" y="25" width="5" height="5" fill="#FFD700"/>
+        <circle cx="75" cy="50" r="2" fill="#ADD8E6"/>
+        <rect x="20" y="55" width="4" height="4" fill="#FFD700"/>
+    </g>
+</svg>

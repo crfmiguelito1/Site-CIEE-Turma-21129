@@ -1,0 +1,102 @@
+-<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="icon" href="../imagens/foguete.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="../imagens/foguete3.png"> 
+<link rel="apple-touch-icon" sizes="180x180" href="../imagens/foguete3.png"> 
+<link rel="shortcut icon" href="../imagens/foguete3.png">
+    <title>Login - Aprimore</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #6A1B9A, #F57C00);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
+        }
+        .login-box {
+            background: #fff;
+            color: #333;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            text-align: center;
+            width: 300px;
+        }
+        .login-box h2 {
+            margin-bottom: 20px;
+            color: #6A1B9A;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            box-sizing: border-box; /* Adicionado para melhor controle do tamanho */
+            text-align: center; /* NOVO: Centraliza o texto dentro dos inputs */
+        }
+        button {
+            background: #6A1B9A;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #F57C00;
+        }
+        /* Estilos para o Dark Mode */
+        .dark body { background-color: #111827; color: #d1d5db; }
+        .dark .login-box { background-color: #1f2937; border: 1px solid #374151; }
+        .dark .login-box h2 { color: #f9fafb; }
+        .dark .login-box input { background-color: #374151; color: #f9fafb; border-color: #4b5563; }
+    </style>
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+</head>
+<body>
+    <div class="login-box">
+        <h2>Aprimore</h2>
+        <form onsubmit="login(event)">
+            <input type="text" id="usuario" placeholder="Usuário" required>
+            <input type="password" id="senha" placeholder="Senha" required>
+            <button type="submit">Entrar</button>
+        </form>
+    </div>
+
+    <script>
+        function login(e) {
+            e.preventDefault();
+            const usuario = document.getElementById("usuario").value.toLowerCase();
+            const senha = document.getElementById("senha").value;
+            
+            // Simulação de login
+            // Salva o nome de usuário e o cargo para usar em outras páginas
+            if (usuario === "naiana" && senha === "ciee") {
+                localStorage.setItem('currentUser', 'CIEE'); // Salva o nome do usuário
+                localStorage.setItem('userRole', 'Empresa'); // Salva o cargo
+                window.location.href = "Empresa.html";
+            } else if (usuario === "cadu" && senha === "vipal") {
+                localStorage.setItem('currentUser', 'Cadu'); // Salva o nome do usuário
+                localStorage.setItem('userRole', 'aluno'); // Salva o cargo
+                window.location.href = "painel.html";
+            } else {
+                alert("Usuário ou senha incorretos!");
+            }
+        }
+    </script>
+</body>
+</html>
