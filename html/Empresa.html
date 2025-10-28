@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Impulso Digital - Painel da Empresa</title> <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root{
+      --cor-roxa-principal:#6A1B9A;
+      --cor-roxa-clara:#E1BEE7;
+      --cor-laranja-destaque:#F57C00;
+      --cor-branca:#FFFFFF;
+      --cor-texto-principal:#333;
+      --sombra-padrao:0 4px 12px rgba(0,0,0,0.1);
+    }
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+    *{box-sizing:border-box}
+    body{
+      font-family:'Montserrat',sans-serif;
+      margin:0;
+      background:#F8F9FA;
+      color:var(--cor-texto-principal);
+      display:flex;
+      min-height:100vh;
+    }
+    .sidebar{
+      width:250px;
+      background:var(--cor-roxa-principal);
+      color:var(--cor-branca);
+      padding:20px;
+      height:100vh;
+      position:sticky;
+      top:0;
+      display: flex; /* Para centralizar o botão de sair no final */
+      flex-direction: column;
+      justify-content: space-between; /* Empurra o botão para baixo */
+    }
+    .sidebar h1{font-size:1.6rem;text-align:center;margin:0 0 24px}
+    .sidebar nav ul{list-style:none;padding:0;margin:0}
+    .sidebar nav li a{
+      display:block;color:var(--cor-branca);text-decoration:none;
+      padding:12px 16px;border-radius:8px;margin-bottom:8px;font-weight:600;
+      transition:background .2s;
+    }
+    .sidebar nav li a:hover,.sidebar nav li a.ativo{background:rgba(255,255,255,0.12)}
+    .main-content{flex:1;padding:28px}
+    header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+    .user-profile{display:flex;align-items:center;gap:12px}
+    .user-profile img{width:50px;height:50px;border-radius:50%;object-fit:cover}
+    .banner{
+      background:linear-gradient(135deg,var(--cor-roxa-principal),var(--cor-laranja-destaque));
+      color:var(--cor-branca);padding:22px;border-radius:12px;margin-bottom:22px;box-shadow:var(--sombra-padrao)
+    }
+    .btn-laranja{
+      background:var(--cor-branca);color:var(--cor-laranja-destaque);border:none;padding:9px 18px;border-radius:22px;font-weight:700;cursor:pointer
+    }
+    .dashboard-grid{display:grid;grid-template-columns:2fr 1fr;gap:22px}
+    .card{background:var(--cor-branca);padding:18px;border-radius:12px;box-shadow:var(--sombra-padrao)}
+    .card h4{margin:0 0 12px;border-left:4px solid var(--cor-roxa-principal);padding-left:10px;font-size:1.05rem}
+    /* Estilos para os novos itens de curso */
+    .curso-item{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      background:#f9f9f9;
+      margin:10px 0;
+      padding:12px 15px;
+      border-radius:10px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.06);
+    }
+    .curso-item i{
+      font-size:1.5em;
+      color:var(--cor-roxa-principal);
+      margin-right:12px;
+    }
+    .curso-item span{
+      flex:1;
+      font-size:0.95em;
+    }
+    .curso-item .btn-laranja{ /* Ajusta o botão para o novo layout de curso */
+      background:var(--cor-laranja-destaque);
+      border:none;
+      padding:8px 12px;
+      color:#fff;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:600;
+    }
+    .curso-item .btn-laranja:hover{
+      background:var(--cor-roxa-principal); /* Hover diferente para o botão de curso */
+    }
+
+    .grafico-container{display:flex;justify-content:center;align-items:center;height:200px}
+    canvas{max-width:100%}
+    nav.breadcrumbs{display:flex;gap:10px;align-items:center;font-size:.9rem;color:var(--cor-texto-principal);margin-bottom:14px}
+    .inscritos-list{list-style:none;padding:0;margin:0}
+    .inscrito-item{padding:10px;border-radius:8px;border:1px solid #eee;margin-bottom:8px;background:#fafafa}
+    /* Estilo para o botão de Sair na sidebar */
+    .btn-logout {
+      background: #dc3545; /* Vermelho para "Sair" */
+      color: var(--cor-branca);
+      text-align: center;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-top: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none; /* Garante que não tenha sublinhado */
+      transition: background 0.2s;
+    }
+    .btn-logout:hover {
+      background: #c82333; /* Um vermelho mais escuro no hover */
+    }
+
+    @media(max-width:900px){
+      .dashboard-grid{grid-template-columns:1fr;gap:16px}
+      .sidebar{display:none}
+      body{display:block}
+      .main-content{padding:18px}
+    }
+    /* Cole isso no <style> de cada página */
+.dark body { background-color: #111827; color: #d1d5db; }
+.dark .card, .dark .course-card { background-color: #1f2937; border: 1px solid #374151; }
+.dark h2, .dark h4, .dark p, .dark span { color: #f9fafb; }
+.dark .sidebar { background-color: #1f2937; border-right: 1px solid #374151; }
+.dark .curso-item { background: #374151; }
+.dark .inscrito-item { background: #374151; border-color: #4b5563;}
+.dark .text-gray-500, .dark .text-gray-600 { color: #9ca3af; }
+  </style>
+  <script>
+  if (localStorage.getItem('theme') === 'dark') {
+    document.documentElement.classList.add('dark');
+  }
+</script>
+<script src="dados.js"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div> <h1>Impulso Digital</h1>
+      <nav>
+        <ul>
+          <li><a href="#dashboard" class="ativo">Dashboard</a></li>
+          <li><a href="#treinamentos">Treinamentos</a></li>
+          <li><a href="#progresso">Progresso</a></li>
+          <li><a href="#relatorios">Relatórios</a></li>
+          <li><a href="settings.html">Configurações</a></li>
+        </ul>
+      </nav>
+    </div>
+    <a href="javascript:void(0)" class="btn-logout" onclick="logout()">Sair</a>
+  </aside>
+
+  <div class="main-content">
+    <header>
+      <div>
+        <h2>Bem-vinda, Naiana!</h2> <p>Gerencie seus cursos e o progresso dos alunos.</p>
+      </div>
+      <div class="user-profile">
+        <img src="https://cieerj.org.br/wp-content/uploads/2024/02/Logo-Oficial-2024.png" alt="Empresa" /> <span>CIEE</span> </div>
+    </header>
+
+    <section id="dashboard" class="banner">
+      <h3>Visão Geral do CIEE 📊</h3>
+      <p>Acompanhe o desempenho geral e as matrículas.</p>
+      <button class="btn-laranja" onclick="location.href='#relatorios'">Ver Relatórios</button>
+    </section>
+
+   <section id="treinamentos" class="card">
+    <h4>Meus Cursos e Gerenciamento</h4>
+    <div id="lista-cursos-container">
+        </div>
+</section>
+
+    <section id="progresso" class="dashboard-grid" style="margin-top:18px">
+      <div class="card">
+        <h4>Progresso dos Alunos (Visão Geral)</h4>
+        <canvas id="lineChart" height="220"></canvas>
+        <p style="font-size:.9rem;color:#555;margin-top:8px">Linha mostra a evolução média dos alunos em todos os cursos.</p>
+      </div>
+
+      <div class="card">
+        <h4>Estatísticas Rápidas</h4>
+        <div class="grafico-container">
+          <canvas id="progressChart" width="180" height="180"></canvas>
+        </div>
+        <p style="text-align:center;margin-top:8px">Média de conclusão: <strong id="percentText">75%</strong> dos cursos</p>
+        <div style="margin-top:12px">
+          <h5 style="margin:0 0 8px 0">Alunos Ativos</h5>
+          <ul id="meusCursos" class="inscritos-list">
+            <li class="inscrito-item">João Silva</li>
+            <li class="inscrito-item">Ana Costa</li>
+            <li class="inscrito-item">Pedro Mendes</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="relatorios" class="card" style="margin-top:18px">
+      <h4>Relatórios Detalhados</h4>
+      <p>Acesse relatórios de progresso individual, taxas de conclusão e desempenho por curso.</p>
+      <button class="btn-laranja" style="background-color: var(--cor-roxa-principal); color: var(--cor-branca);">Gerar Relatório de Alunos</button>
+      <button class="btn-laranja" style="background-color: var(--cor-roxa-principal); color: var(--cor-branca); margin-left: 10px;">Exportar Dados</button>
+    </section>
+
+    <section id="configuracoes" class="card" style="margin-top:18px">
+      <h4>Configurações da Plataforma e Cursos</h4>
+      <p>Ajuste as configurações gerais, adicione novos Empresaes ou edite informações de cursos.</p>
+      <button class="btn-laranja" style="background-color: var(--cor-roxa-principal); color: var(--cor-branca);">Gerenciar Empresaes</button>
+      <button class="btn-laranja" style="background-color: var(--cor-roxa-principal); color: var(--cor-branca); margin-left: 10px;">Adicionar Novo Curso</button>
+    </section>
+  </div>
+
+  <script>
+    const inscritos = ["Capacitação", "Padronização de Processos", "Adaptação à Tecnologia"]; // Exemplo de cursos já inscritos para Empresa
+    
+    function inscrever(nome){
+      alert("Como Empresa, você gerencia cursos. Use o botão 'Gerenciar' para este curso.");
+      // Se quisesse que o Empresa também pudesse se inscrever como aluno, a lógica seria aqui
+    }
+
+    // SUBSTITUA a função gerenciarCurso antiga por esta:
+function gerenciarCurso(cursoId) {
+  // Redireciona para a nova página de gerenciamento, passando o ID do curso na URL
+  window.location.href = `gerenciamento.html?cursoId=${cursoId}`;
+}
+
+// ADICIONE esta nova função para criar a lista de cursos
+function carregarCursos() {
+  const container = document.getElementById('lista-cursos-container');
+  container.innerHTML = ''; // Limpa o container
+
+  baseDeDados.cursos.forEach(curso => {
+    const cursoHTML = `
+      <div class="curso-item">
+        <i class="${curso.icone}"></i>
+        <span><strong>${curso.nome}</strong> – Nível: ${curso.nivel} – ${curso.duracao}h</span>
+        <button class="btn-laranja" onclick="gerenciarCurso(${curso.id})">Gerenciar</button>
+      </div>
+    `;
+    container.innerHTML += cursoHTML;
+  });
+}
+
+// Chame a nova função quando a página carregar
+document.addEventListener('DOMContentLoaded', () => {
+    carregarCursos();
+    // O restante do seu código DOMContentLoaded pode vir aqui
+});
+
+
+
+
+
+
+      // Aqui você poderia redirecionar para uma página de gerenciamento específica do curso
+    
+
+    function atualizarMeusCursos(){
+      const ul = document.getElementById('meusCursos');
+      ul.innerHTML = '';
+      // Para o Empresa, pode-se listar alunos ativos ou cursos que ele ministra
+      const alunosAtivos = ["João Silva", "Ana Costa", "Pedro Mendes", "Mariana Lima"];
+      alunosAtivos.forEach(aluno=>{
+        const li = document.createElement('li');
+        li.className='inscrito-item';
+        li.textContent = aluno;
+        ul.appendChild(li);
+      });
+    }
+
+    // Doughnut/progress (exemplo para Empresa - média de conclusão)
+    const ctxP = document.getElementById('progressChart').getContext('2d');
+    const progressChart = new Chart(ctxP, {
+      type:'doughnut',
+      data:{
+        datasets:[{data:[75,25],backgroundColor:[getComputedStyle(document.documentElement).getPropertyValue('--cor-laranja-destaque').trim() || '#F57C00','#E1BEE7'],borderWidth:0}]
+      },
+      options:{cutout:'72%',plugins:{legend:{display:false}},animation:{animateScale:true,animateRotate:true}}
+    });
+
+    // Line chart - evolução individual (exemplo para Empresa - média de todos os alunos)
+    const ctxL = document.getElementById('lineChart').getContext('2d');
+    const lineChart = new Chart(ctxL,{
+      type:'line',
+      data:{
+        labels:['Mês 1','Mês 2','Mês 3','Mês 4','Mês 5'],
+        datasets:[{
+          label:'Evolução Média dos Alunos',
+          data:[20,45,60,75,85], // Dados de exemplo para o Empresa
+          borderColor: getComputedStyle(document.documentElement).getPropertyValue('--cor-roxa-principal').trim() || '#6A1B9A',
+          backgroundColor:'rgba(106,27,154,0.12)',
+          tension:0.35,fill:true,pointRadius:4,pointHoverRadius:6
+        }]
+      },
+      options:{
+        plugins:{legend:{display:false}},
+        scales:{y:{beginAtZero:true,max:100}},
+        animation:{duration:1000}
+      }
+    });
+
+    function atualizaProgresso(){
+      // Para a Empresa, esta função pode ser adaptada para mostrar métricas gerais
+      const percent = Math.min(100, Math.round(75 + Math.random() * 5)); // Exemplo aleatório
+      progressChart.data.datasets[0].data[0]=percent;
+      progressChart.data.datasets[0].data[1]=100-percent;
+      progressChart.update();
+      document.getElementById('percentText').textContent = percent + '%';
+
+      // A linha de evolução pode ser atualizada com dados de performance geral ou de um curso específico
+      // Não vou alterar a lógica de `novosLabels` e `novosDados` aqui para não complicar,
+      // mas você pode personalizar para o contexto do Empresa.
+    }
+
+    // links do menu para navegação simples
+    document.querySelectorAll('.sidebar nav a').forEach(a=>{
+      a.addEventListener('click', e=>{
+        document.querySelectorAll('.sidebar nav a').forEach(x=>x.classList.remove('ativo'));
+        a.classList.add('ativo');
+      });
+    });
+
+    function logout() {
+      window.location.href = "index.html";
+    }
+
+    // inicialização
+    atualizarMeusCursos(); // Pode ser adaptado para listar "Meus Alunos" ou "Cursos Ministrados"
+      // Coloque este script no final de cada página de curso e na página settings.html
+
+document.addEventListener('DOMContentLoaded', () => {
+    const backLink = document.getElementById('back-to-dashboard-link');
+    
+    if (backLink) {
+        // Lê o cargo do usuário salvo no "crachá digital"
+        const userRole = localStorage.getItem('userRole');
+
+        // AQUI ESTÁ O ELSE QUE VOCÊ PEDIU
+        if (userRole === 'Empresa') {
+            // Se for Empresa, o link aponta para o painel do Empresa
+            backLink.href = "Empresa.html"; // Use ../ se a página estiver na pasta /cursos
+        } else {
+            // Caso contrário (aluno ou indefinido), aponta para o painel do aluno
+            backLink.href = "painel.html"; // Use ../ se a página estiver na pasta /cursos
+        }
+    }
+    
+    // Opcional: Atualiza o nome do usuário na página, se houver um local para isso
+    const usernameDisplay = document.querySelector('.username-display'); // Exemplo
+    if (usernameDisplay) {
+        usernameDisplay.textContent = localStorage.getItem('currentUser') || 'Usuário';
+    }
+});
+  </script>
+</body>
+</html>
