@@ -1,13 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- ELEMENTOS DO DOM ---
+    
     const usernameInput = document.getElementById('username');
     const saveUsernameBtn = document.getElementById('save-username');
     const darkModeToggle = document.getElementById('dark-mode-toggle');
     const resetProgressBtn = document.getElementById('reset-progress');
     const htmlElement = document.documentElement;
 
-    // --- FUNÇÃO PARA CARREGAR CONFIGURAÇÕES SALVAS ---
+    
     function loadSettings() {
         const savedUsername = localStorage.getItem('currentUser');
         if (savedUsername) {
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- SALVAR NOME DE USUÁRIO ---
+    
     saveUsernameBtn.addEventListener('click', () => {
         const newUsername = usernameInput.value.trim();
         if (newUsername) {
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- LÓGICA DO DARK MODE ---
+    
     darkModeToggle.addEventListener('change', () => {
         if (darkModeToggle.checked) {
             htmlElement.classList.add('dark');
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- LÓGICA PARA RESETAR PROGRESSO ---
+    
     resetProgressBtn.addEventListener('click', () => {
         Swal.fire({
             title: 'Você tem certeza?',
@@ -67,9 +67,10 @@ document.addEventListener('DOMContentLoaded', () => {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                // --- INÍCIO DA MODIFICAÇÃO: Correção da chave ---
-                localStorage.removeItem('cursosInscritos'); // <-- AJUSTE ESSENCIAL
-                // --- FIM DA MODIFICAÇÃO ---
+                
+                localStorage.removeItem('cursosInscritos');
+                localStorage.removeItem('forumPostsHTML');
+                
 
                 Swal.fire(
                     'Resetado!',

@@ -105,8 +105,8 @@
                         </div>
                     </div>
                 </div>
-
-            </div>
+                
+                </div>
 
             <div class="p-4 bg-gray-100 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600 flex gap-3 items-center">
                 <input type="text" id="input-enviar-mensagem" placeholder="Digite sua mensagem aqui..." class="flex-1 px-4 py-3 border rounded-lg bg-white dark:bg-gray-800 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500">
@@ -144,22 +144,40 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // --- LÓGICA DO LINK "VOLTAR" (Já existente) ---
+            // --- LÓGICA DO LINK "VOLTAR" ---
             const backLink = document.getElementById('back-to-dashboard-link');
             if (backLink) {
                 const userRole = localStorage.getItem('userRole');
                 backLink.href = (userRole === 'Empresa') ? "Empresa.html" : "painel.html";
             }
 
-            // --- ELEMENTOS INTERATIVOS ---
+            // --- [NOVO] CHAVE DE ARMAZENAMENTO E ELEMENTOS PRINCIPAIS ---
+            const STORAGE_KEY = 'forumPostsHTML';
+            const chatArea = document.getElementById('chat-area');
             const btnCriarTopico = document.getElementById('btn-criar-topico');
             const modal = document.getElementById('modal-criar-topico');
             const btnCancelar = document.getElementById('btn-cancelar-topico');
             const btnPostar = document.getElementById('btn-postar-topico');
-            const chatArea = document.getElementById('chat-area');
             const btnEnviar = document.getElementById('btn-enviar-mensagem');
             const inputEnviar = document.getElementById('input-enviar-mensagem');
             const inputBuscar = document.getElementById('input-buscar');
+
+            // --- [NOVA FUNÇÃO] PARA CARREGAR POSTS SALVOS ---
+            function loadPosts() {
+                const savedPosts = localStorage.getItem(STORAGE_KEY);
+                if (savedPosts) {
+                    chatArea.innerHTML += savedPosts;
+                }
+            }
+
+            // --- [NOVA FUNÇÃO] PARA SALVAR NOVO POST ---
+            function savePost(newPostHTML) {
+                const currentPosts = localStorage.getItem(STORAGE_KEY) || '';
+                localStorage.setItem(STORAGE_KEY, currentPosts + newPostHTML);
+            }
+
+            // --- [NOVA CHAMADA] CARREGA OS POSTS QUANDO A PÁGINA ABRE ---
+            loadPosts();
 
             // --- 1. FUNCIONALIDADE: MODAL "CRIAR TÓPICO" ---
             btnCriarTopico.addEventListener('click', () => {
@@ -182,7 +200,6 @@
                 const userName = localStorage.getItem('currentUser') || 'Você';
                 const userInitial = userName.charAt(0).toUpperCase();
 
-                // Cria o HTML para o novo tópico (com título)
                 const newPostHTML = `
                 <div class="flex items-start gap-3 forum-post">
                     <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white font-bold">
@@ -200,14 +217,14 @@
                     </div>
                 </div>`;
 
-                chatArea.innerHTML += newPostHTML; // Adiciona o novo post
-                modal.classList.add('hidden'); // Esconde o modal
+                // [MODIFICADO] Salva antes de adicionar ao HTML
+                savePost(newPostHTML);
+                chatArea.innerHTML += newPostHTML;
+                modal.classList.add('hidden'); 
 
-                // Limpa os campos do modal
                 document.getElementById('input-titulo-topico').value = '';
                 document.getElementById('input-mensagem-topico').value = '';
                 
-                // Rola para o final da área de chat
                 chatArea.scrollTop = chatArea.scrollHeight;
             });
 
@@ -219,8 +236,6 @@
                 const userName = localStorage.getItem('currentUser') || 'Você';
                 const userInitial = userName.charAt(0).toUpperCase();
 
-                // Cria o HTML para a nova resposta (sem título)
-                // Usando roxo para diferenciar o usuário logado
                 const newReplyHTML = `
                 <div class="flex items-start gap-3 forum-post">
                     <div class="flex-shrink-0 w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold">
@@ -237,16 +252,17 @@
                     </div>
                 </div>`;
 
+                // [MODIFICADO] Salva antes de adicionar ao HTML
+                savePost(newReplyHTML);
                 chatArea.innerHTML += newReplyHTML;
-                inputEnviar.value = ''; // Limpa o input
-                chatArea.scrollTop = chatArea.scrollHeight; // Rola para o final
+                inputEnviar.value = '';
+                chatArea.scrollTop = chatArea.scrollHeight;
             }
 
             btnEnviar.addEventListener('click', enviarResposta);
             inputEnviar.addEventListener('keydown', (e) => {
-                // Permite enviar com "Enter"
                 if (e.key === 'Enter') {
-                    e.preventDefault(); // Impede a quebra de linha
+                    e.preventDefault();
                     enviarResposta();
                 }
             });
@@ -254,14 +270,15 @@
             // --- 3. FUNCIONALIDADE: "BUSCAR" ---
             inputBuscar.addEventListener('keyup', () => {
                 const termo = inputBuscar.value.toLowerCase();
-                const posts = document.querySelectorAll('.forum-post');
+                // Importante: QuerySelectorAll busca os posts estáticos E os que foram adicionados
+                const posts = document.querySelectorAll('.forum-post'); 
 
                 posts.forEach(post => {
                     const textoPost = post.textContent.toLowerCase();
                     if (textoPost.includes(termo)) {
-                        post.classList.remove('hidden'); // Mostra o post
+                        post.classList.remove('hidden');
                     } else {
-                        post.classList.add('hidden'); // Esconde o post
+                        post.classList.add('hidden');
                     }
                 });
             });
