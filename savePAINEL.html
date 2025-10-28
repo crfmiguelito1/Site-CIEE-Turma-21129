@@ -1,0 +1,632 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Impulso Digital - Painel de Controle</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    :root{
+      --cor-roxa-principal:#6A1B9A;
+      --cor-roxa-clara:#E1BEE7;
+      --cor-laranja-destaque:#F57C00;
+      --cor-branca:#FFFFFF;
+      --cor-texto-principal:#333;
+      --sombra-padrao:0 4px 12px rgba(0,0,0,0.1);
+    }
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+    *{box-sizing:border-box}
+    body{
+      font-family:'Montserrat',sans-serif;
+      margin:0;
+      background:#F8F9FA;
+      color:var(--cor-texto-principal);
+      display:flex;
+      min-height:100vh;
+    }
+    .sidebar{
+      width:250px;
+      background:var(--cor-roxa-principal);
+      color:var(--cor-branca);
+      padding:20px;
+      height:100vh;
+      position:sticky;
+      top:0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .sidebar h1{font-size:1.6rem;text-align:center;margin:0 0 24px}
+    .sidebar nav ul{list-style:none;padding:0;margin:0}
+    .sidebar nav li a{
+      display:block;color:var(--cor-branca);text-decoration:none;
+      padding:12px 16px;border-radius:8px;margin-bottom:8px;font-weight:600;
+      transition:background .2s;
+    }
+    .sidebar nav li a:hover,.sidebar nav li a.ativo{background:rgba(255,255,255,0.12)}
+    .main-content{flex:1;padding:28px}
+    header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+    .user-profile{display:flex;align-items:center;gap:12px}
+    .user-profile img{width:50px;height:50px;border-radius:50%;object-fit:cover}
+    .banner{
+      background:linear-gradient(135deg,var(--cor-roxa-principal),var(--cor-laranja-destaque));
+      color:var(--cor-branca);padding:22px;border-radius:12px;margin-bottom:22px;box-shadow:var(--sombra-padrao)
+    }
+    .btn-laranja{
+      background:var(--cor-branca);color:var(--cor-laranja-destaque);border:none;padding:9px 18px;border-radius:22px;font-weight:700;cursor:pointer
+    }
+    .dashboard-grid{display:grid;grid-template-columns:2fr 1fr;gap:22px}
+    .card{background:var(--cor-branca);padding:18px;border-radius:12px;box-shadow:var(--sombra-padrao)}
+    .card h4{margin:0 0 12px;border-left:4px solid var(--cor-roxa-principal);padding-left:10px;font-size:1.05rem}
+    .curso-item{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      background:#f9f9f9;
+      margin:10px 0;
+      padding:12px 15px;
+      border-radius:10px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.06);
+    }
+    .curso-item i{
+      font-size:1.5em;
+      color:var(--cor-roxa-principal);
+      margin-right:12px;
+    }
+    .curso-item span{
+      flex:1;
+      font-size:0.95em;
+    }
+    .curso-item .btn-laranja{
+      background:var(--cor-laranja-destaque);
+      border:none;
+      padding:8px 12px;
+      color:#fff;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:600;
+    }
+    .curso-item .btn-laranja:hover{
+      background:var(--cor-roxa-principal);
+    }
+    .grafico-container{display:flex;justify-content:center;align-items:center;height:200px}
+    canvas{max-width:100%}
+    .inscritos-list{list-style:none;padding:0;margin:0}
+    .inscrito-item{padding:10px;border-radius:8px;border:1px solid #eee;margin-bottom:8px;background:#fafafa}
+    .btn-logout {
+      background: #dc3545;
+      color: var(--cor-branca);
+      text-align: center;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-top: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-logout:hover {
+      background: #c82333;
+    }
+    @media(max-width:900px){
+      .dashboard-grid{grid-template-columns:1fr;gap:16px}
+      .sidebar{display:none}
+      body{display:block}
+      .main-content{padding:18px}
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div> <h1>Impulso Digital</h1>
+      <nav>
+        <ul>
+          <li><a href="#dashboard" class="ativo">Dashboard</a></li>
+          <li><a href="#treinamentos">Treinamentos</a></li>
+          <li><a href="#progresso">Progresso</a></li>
+          <li><a href="#relatorios">Relatórios</a></li>
+          <li><a href="settings.html">Configurações</a></li>
+        </ul>
+      </nav>
+    </div>
+    <a href="javascript:void(0)" class="btn-logout" onclick="logout()">Sair</a>
+  </aside>
+
+  <div class="main-content">
+    <header>
+      <div>
+        <h2>Bem-vindo, cadu!</h2>
+        <p>Resumo do seu progresso</p>
+      </div>
+      <div class="user-profile">
+        <img src="https://i.pravatar.cc/150?img=3" alt="Usuário" />
+        <span>cadu </span>
+      </div>
+    </header>
+
+    <section id="dashboard" class="banner">
+      <h3>Continue sua jornada digital 🚀</h3>
+      <p>Explore novos cursos e aumente seu conhecimento.</p>
+      <button class="btn-laranja" onclick="location.href='#treinamentos'">Explorar Cursos</button>
+    </section>
+
+    <section id="treinamentos" class="card">
+      <h4>Cursos Disponíveis</h4>
+      
+      <div class="curso-item">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span><strong>Capacitação</strong> – Nível: Iniciante – 10h</span>
+        <button class="btn-laranja" onclick="handleCourseAction('Capacitação', this)">Inscrever-se</button>
+      </div>
+      <div class="curso-item">
+        <i class="fa-solid fa-gear"></i>
+        <span><strong>Padronização de Processos</strong> – Nível: Intermediário – 15h</span>
+        <button class="btn-laranja" onclick="handleCourseAction('Padronização de Processos', this)">Inscrever-se</button>
+      </div>
+      <div class="curso-item">
+        <i class="fa-solid fa-computer"></i>
+        <span><strong>Adaptação à Tecnologia</strong> – Nível: Avançado – 20h</span>
+        <button class="btn-laranja" onclick="handleCourseAction('Adaptação à Tecnologia', this)">Inscrever-se</button>
+      </div>
+      <div class="curso-item">
+        <i class="fa-solid fa-bolt"></i>
+        <span><strong>Produtividade</strong> – Nível: Intermediário – 12h</span>
+        <button class="btn-laranja" onclick="handleCourseAction('Produtividade', this)">Inscrever-se</button>
+      </div>
+      <div class="curso-item">
+        <i class="fa-solid fa-book-open"></i>
+        <span><strong>Aprendizado Contínuo</strong> – Nível: Iniciante – 8h</span>
+        <button class="btn-laranja" onclick="handleCourseAction('Aprendizado Contínuo', this)">Inscrever-se</button>
+      </div>
+      <div class="curso-item">
+        <i class="fa-solid fa-users"></i>
+        <span><strong>Reduzir Rotatividade</strong> – Nível: Intermediário – 10h</span>
+        <button class="btn-laranja" onclick="handleCourseAction('Reduzir Rotatividade', this)">Inscrever-se</button>
+      </div>
+      <div class="curso-item">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span><strong>Evitar Falhas</strong> – Nível: Avançado – 14h</span>
+        <button class="btn-laranja" onclick="handleCourseAction('Evitar Falhas', this)">Inscrever-se</button>
+      </div>
+    </section>
+
+    <section id="progresso" class="dashboard-grid" style="margin-top:18px">
+        <div class="card"><h4>Gráfico de Aprendizado Individual</h4><canvas id="lineChart" height="220"></canvas><p style="font-size:.9rem;color:#555;margin-top:8px">Linha mostra evolução do colaborador conforme conclui cursos.</p></div>
+        <div class="card"><h4>Progresso Geral</h4><div class="grafico-container"><canvas id="progressChart" width="180" height="180"></canvas></div><p style="text-align:center;margin-top:8px">Você completou <strong id="percentText">65%</strong> dos cursos</p><div style="margin-top:12px"><h5 style="margin:0 0 8px 0">Meus Cursos</h5><ul id="meusCursos" class="inscritos-list"></ul></div></div>
+    </section>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('login') === 'success') {
+            Swal.fire({
+                title: 'Login efetuado!',
+                text: 'Bem-vindo de volta, Cadu!',
+                icon: 'success',
+                timer: 2500,
+                showConfirmButton: false
+            });
+        }
+    });
+
+    const inscritos = [];
+
+    // MODIFICADO: Função 'inscrever' foi substituída pela nova função 'handleCourseAction'
+    function handleCourseAction(nomeDoCurso, botao) {
+      // Caso 1: Se o usuário NÃO está inscrito, realiza a inscrição
+      if (!inscritos.includes(nomeDoCurso)) {
+        inscritos.push(nomeDoCurso);
+        atualizarMeusCursos();
+        atualizaProgresso();
+        
+        // Muda o texto do próprio botão para "Acessar"
+        botao.textContent = 'Acessar';
+
+        // Mostra o alerta de sucesso (usando SweetAlert)
+        Swal.fire({
+            icon: 'success',
+            title: 'Inscrição confirmada!',
+            text: `Você agora está inscrito no curso: ${nomeDoCurso}`,
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
+      } 
+      // Caso 2: Se o usuário JÁ ESTÁ inscrito, a função do botão é levar para a página do curso
+      else {
+        window.location.href = 'TreinamentoCompleto.html';
+      }
+    }
+
+    function atualizarMeusCursos(){
+      const ul = document.getElementById('meusCursos');
+      ul.innerHTML = '';
+      inscritos.forEach(c=>{
+        const li = document.createElement('li');
+        li.className='inscrito-item';
+        li.textContent = c;
+        ul.appendChild(li);
+      });
+    }
+
+    // O restante do seu JavaScript (gráficos, logout, etc.) permanece exatamente o mesmo
+    const ctxP = document.getElementById('progressChart').getContext('2d');
+    const progressChart = new Chart(ctxP, { type:'doughnut', data:{ datasets:[{data:[65,35],backgroundColor:[getComputedStyle(document.documentElement).getPropertyValue('--cor-laranja-destaque').trim() || '#F57C00','#E1BEE7'],borderWidth:0}] }, options:{cutout:'72%',plugins:{legend:{display:false}},animation:{animateScale:true,animateRotate:true}} });
+    const ctxL = document.getElementById('lineChart').getContext('2d');
+    const lineChart = new Chart(ctxL, { type:'line', data:{ labels:['Início','Curso 1','Curso 2','Curso 3','Último'], datasets:[{ label:'Evolução do Aprendizado', data:[10,30,50,65,80], borderColor: getComputedStyle(document.documentElement).getPropertyValue('--cor-roxa-principal').trim() || '#6A1B9A', backgroundColor:'rgba(106,27,154,0.12)', tension:0.35,fill:true,pointRadius:4,pointHoverRadius:6 }] }, options:{ plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true,max:100}}, animation:{duration:1000} } });
+    
+    function atualizaProgresso(){
+      const percent = Math.min(100, Math.round(65 + inscritos.length* (100/12)));
+      progressChart.data.datasets[0].data[0]=percent;
+      progressChart.data.datasets[0].data[1]=100-percent;
+      progressChart.update();
+      document.getElementById('percentText').textContent = percent + '%';
+      const novosLabels = ['Início'];
+      const novosDados = [10];
+      inscritos.forEach((c,i)=>{
+        novosLabels.push('Curso ' + (i+1));
+        novosDados.push(10 + Math.min(90, (i+1)*15));
+      });
+      novosLabels.push('Último');
+      novosDados.push(Math.min(100, novosDados[novosDados.length-1] + 5));
+      lineChart.data.labels = novosLabels;
+      lineChart.data.datasets[0].data = novosDados;
+      lineChart.update();
+    }
+    document.querySelectorAll('.sidebar nav a').forEach(a=>{
+      a.addEventListener('click', e=>{
+        document.querySelectorAll('.sidebar nav a').forEach(x=>x.classList.remove('ativo'));
+        a.classList.add('ativo');
+      });
+    });
+    function logout() {
+      window.location.href = "index.html?logout=success";
+    }
+    atualizarMeusCursos();
+    //ADAPTAÇÃO À TECNOLOGIA, ISSO É UM SAVE DO CODIGO DE ADAPTAÇÃO À TECNOLOGIA A PARTIR DA LINHA 307, COLEI AQUI PRA TER UM LUGAR SEGURO
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+    
+ <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Treinamento de Adaptação à Tecnologia</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <style>
+    /* Estilos base (já existentes) */
+    .progress-bar { transition: width 0.2s ease-in-out; }
+    .no-copy { user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
+    .custom-radio input { display: none; }
+    .custom-radio label { transition: all 0.2s ease-in-out; border: 2px solid #e5e7eb; } /* Borda padrão mais suave */
+    .custom-radio input:checked + label { border-color: #9333ea; background-color: #f5f3ff; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); }
+    .custom-radio input:checked + label .icon-circle { background-color: #9333ea; color: white; }
+    .correct-answer { background-color: #ecfdf5; border-color: #22c55e !important; }
+    .incorrect-answer { background-color: #fef2f2; border-color: #ef4444 !important; }
+
+    /* [NOVO] Estilos Adicionais para um Layout Mais Bonito */
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background-color: #f8f9fa; /* Um cinza muito claro para destacar os cards brancos */
+    }
+
+    /* Estilo para os cards de conteúdo */
+    .course-card {
+        background-color: #ffffff;
+        border-radius: 12px;
+        padding: 2.5rem; /* Mais espaço interno */
+        box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+        margin-top: 1.5rem;
+        border: 1px solid #e5e7eb;
+    }
+
+    /* Melhorando as abas */
+    .tab-button {
+        padding: 1rem 1.5rem;
+        font-weight: 600;
+        color: #6b7280;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s ease;
+    }
+    .tab-button:hover {
+        background-color: #f9fafb;
+        color: #4f46e5;
+    }
+    .active-tab {
+        color: #6A1B9A; /* Roxo principal */
+        border-bottom-color: #6A1B9A;
+    }
+
+    /* Estilo para a área de texto (leitura) */
+    .prose-styling h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        color: #111827;
+    }
+    .prose-styling p {
+        font-size: 1.1rem; /* Tamanho de fonte maior para leitura */
+        line-height: 1.8; /* Espaçamento entre linhas maior */
+        color: #374151;
+        margin-bottom: 1.25rem;
+    }
+    .prose-styling ul {
+        list-style-position: inside;
+        padding-left: 1rem;
+    }
+    .prose-styling li {
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #374151;
+    }
+
+    /* Melhorando a tela de resultados */
+    #results-section.course-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    .results-icon {
+        font-size: 4rem;
+        color: #f59e0b; /* Um dourado para o troféu */
+        margin-bottom: 1rem;
+        line-height: 1;
+    }
+    
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+  <header class="bg-gradient-to-r from-purple-700 to-orange-500 text-white p-4 shadow-md flex justify-between items-center sticky top-0 z-10">
+    <h1 class="text-2xl font-bold">Treinamento: Adaptação à Tecnologia</h1>
+    
+    <a href="painelteste.html" class="bg-white text-purple-700 font-bold py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors duration-300">
+        <i class="fas fa-arrow-left mr-2"></i>Voltar ao Painel
+    </a>
+  </header>
+
+  <main class="p-4 md:p-8 max-w-5xl mx-auto">
+    <div id="training-section">
+      <div role="tablist" aria-label="Navegação de conteúdo" class="flex border-b border-gray-200 bg-white rounded-t-lg shadow-sm">
+        <button id="reading-tab" role="tab" aria-selected="true" aria-controls="reading-panel" class="tab-button active-tab">Leitura</button>
+        <button id="video-tab" role="tab" aria-selected="false" aria-controls="video-panel" class="tab-button">Vídeo</button>
+      </div>
+      
+      <div class="course-card">
+        <div id="reading-panel" role="tabpanel" aria-labelledby="reading-tab">
+            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
+                <div id="progressBarReading" class="progress-bar bg-orange-500 h-2.5 rounded-full w-0"></div>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Conteúdo de Leitura</h2>
+            <div class="prose-styling">
+                <h3>O que é Adaptação à Tecnologia?</h3>
+                <p>Adaptação à Tecnologia não é sobre trabalhar mais, mas sim sobre trabalhar de forma mais inteligente. É a medida da eficiência da produção, expressa pela relação entre o que é produzido e os recursos que foram utilizados para tal. Em um contexto pessoal e profissional, significa realizar mais tarefas importantes em menos tempo, sem sacrificar a qualidade.</p>
+                <h3>Técnica Pomodoro</h3>
+                <p>Uma das técnicas mais famosas é o Método Pomodoro. Consiste em dividir o trabalho em intervalos de tempo focados, tradicionalmente de 25 minutos, separados por pequenas pausas. Isso ajuda a manter a mente fresca e a evitar o esgotamento.</p>
+                <ul>
+                    <li>Escolha uma tarefa para ser executada.</li>
+                    <li>Ajuste o cronômetro para 25 minutos.</li>
+                    <li>Trabalhe na tarefa sem interrupções.</li>
+                    <li>Quando o cronômetro tocar, faça uma pausa de 5 minutos.</li>
+                    <li>A cada quatro "pomodoros", faça uma pausa mais longa de 15 a 30 minutos.</li>
+                </ul>
+                <div style="height: 1000px;"><p>Continue rolando a página para simular o progresso...</p></div>
+            </div>
+        </div>
+        <div id="video-panel" role="tabpanel" aria-labelledby="video-tab" class="hidden">
+            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
+                <div id="progressBarVideo" class="progress-bar bg-purple-600 h-2.5 rounded-full w-0"></div>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Treinamento em Vídeo</h2>
+            <video id="trainingVideo" controls class="w-full max-w-4xl rounded-lg bg-black mx-auto shadow-lg">
+                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+            </video>
+        </div>
+      </div>
+
+      <div class="text-center mt-8">
+        <button id="start-quiz-btn" class="w-full md:w-auto inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 transition-transform transform hover:scale-105">
+            Estou pronto para o teste!
+        </button>
+      </div>
+    </div>
+
+    <div id="quiz-section" class="hidden course-card">
+      <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Verificação de Conhecimento</h2>
+      <form id="quiz-form">
+        <div id="questions-container" class="space-y-8"></div>
+        <div class="text-center mt-10">
+            <button type="submit" class="w-full md:w-auto inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-white bg-orange-500 hover:bg-orange-600 transition-transform transform hover:scale-105">
+                Verificar Respostas
+            </button>
+        </div>
+      </form>
+    </div>
+
+    <div id="results-section" class="hidden course-card">
+        <div class="results-icon"><i class="fas fa-trophy"></i></div>
+        <h2 class="text-3xl font-bold text-purple-700 mb-4">Treinamento Concluído!</h2>
+        <p class="text-lg text-gray-600 mb-4">Sua pontuação final foi:</p>
+        <p class="text-6xl font-bold text-orange-500 mb-4"><span id="score">0</span> / <span id="total-score">10</span></p>
+        <p class="text-xl text-gray-700 font-semibold" id="result-message">Continue se esforçando!</p>
+        <a href="painelteste.html" class="mt-8 bg-purple-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-purple-700 transition-colors duration-300">
+            Voltar para Meus Cursos
+        </a>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // --- ELEMENTOS DO DOM ---
+      const trainingSection = document.getElementById('training-section');
+      const quizSection = document.getElementById('quiz-section');
+      const resultsSection = document.getElementById('results-section');
+      const startQuizBtn = document.getElementById('start-quiz-btn');
+      
+      // Lógica das abas e progresso (sem alterações funcionais)
+      const tabButtons = document.querySelectorAll('.tab-button');
+      const tabPanels = document.querySelectorAll('[role="tabpanel"]');
+      const readingTabPanel = document.getElementById('reading-panel');
+      function switchTab(clickedTab) {
+        tabButtons.forEach(button => { button.classList.remove('active-tab'); button.setAttribute('aria-selected', 'false'); });
+        clickedTab.classList.add('active-tab'); clickedTab.setAttribute('aria-selected', 'true');
+        tabPanels.forEach(panel => { panel.classList.add('hidden'); });
+        document.getElementById(clickedTab.getAttribute('aria-controls')).classList.remove('hidden');
+      }
+      tabButtons.forEach(button => { button.addEventListener('click', () => switchTab(button)); });
+
+      let maxScrollPercent = 0;
+      const progressBarReading = document.getElementById('progressBarReading');
+      function throttle(func, limit) {
+        let inThrottle;
+        return function(...args) { 
+          if (!inThrottle) {
+            func.apply(this, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+          }
+        }
+      }
+      function updateReadingProgress() {
+        if (readingTabPanel.offsetParent === null) return;
+        const scrollTop = window.scrollY; const windowHeight = window.innerHeight; const docHeight = document.documentElement.scrollHeight;
+        if (docHeight === 0) return;
+        const totalScrollable = docHeight - windowHeight; const currentScrollPercent = totalScrollable > 0 ? (scrollTop / totalScrollable) * 100 : 100;
+        if (currentScrollPercent > maxScrollPercent) { maxScrollPercent = currentScrollPercent; progressBarReading.style.width = Math.min(maxScrollPercent, 100) + '%'; }
+      }
+      window.addEventListener('scroll', throttle(updateReadingProgress, 100));
+
+      const video = document.getElementById('trainingVideo');
+      const progressBarVideo = document.getElementById('progressBarVideo');
+      const watchedSeconds = new Set(); let videoDuration = 0;
+      video.addEventListener('loadedmetadata', () => { videoDuration = Math.floor(video.duration); });
+      video.addEventListener('timeupdate', () => { if (videoDuration > 0) { const currentTime = Math.floor(video.currentTime); watchedSeconds.add(currentTime); const progressPercent = (watchedSeconds.size / videoDuration) * 100; progressBarVideo.style.width = Math.min(progressPercent, 100) + '%'; } });
+
+      // --- LÓGICA DO QUIZ ---
+      const quizForm = document.getElementById('quiz-form');
+      const questionsContainer = document.getElementById('questions-container');
+      
+      // [!] EDITE AQUI: Perguntas e respostas do quiz para ESTE curso
+      const quizData = [
+        { question: "Qual o objetivo principal da Adaptação à Tecnologia?", options: ["Trabalhar mais horas", "Trabalhar de forma mais inteligente", "Fazer muitas pausas", "Evitar tecnologia"], correct: 1 },
+        { question: "Na Técnica Pomodoro, quanto tempo dura um intervalo de foco tradicional?", options: ["15 minutos", "25 minutos", "45 minutos", "60 minutos"], correct: 1 }
+      ];
+
+      function buildQuiz() {
+        // ... (código da função buildQuiz permanece o mesmo)
+         quizData.forEach((questionData, qIndex) => {
+          const questionElement = document.createElement('div');
+          questionElement.className = 'p-6 bg-gray-50 rounded-lg border border-gray-200 no-copy';
+          const questionText = document.createElement('p');
+          questionText.className = 'text-lg font-semibold text-gray-800 mb-4';
+          questionText.textContent = `${qIndex + 1}. ${questionData.question}`;
+          questionElement.appendChild(questionText);
+          const optionsContainer = document.createElement('div');
+          optionsContainer.className = 'space-y-3';
+          questionData.options.forEach((optionText, oIndex) => {
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'custom-radio';
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.id = `q${qIndex}o${oIndex}`;
+            input.name = `question${qIndex}`;
+            input.value = oIndex;
+            const label = document.createElement('label');
+            label.htmlFor = input.id;
+            label.className = 'flex items-center p-4 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors';
+            const iconCircle = document.createElement('span');
+            iconCircle.className = 'icon-circle flex items-center justify-center w-6 h-6 mr-4 rounded-full bg-gray-200 text-sm font-bold text-gray-600 transition';
+            iconCircle.textContent = String.fromCharCode(65 + oIndex);
+            const textSpan = document.createElement('span');
+            textSpan.className = 'text-gray-700';
+            textSpan.textContent = optionText;
+            const feedbackIcon = document.createElement('span');
+            feedbackIcon.className = 'feedback-icon ml-auto';
+            label.append(iconCircle, textSpan, feedbackIcon);
+            optionDiv.append(input, label);
+            optionsContainer.appendChild(optionDiv);
+          });
+          questionElement.appendChild(optionsContainer);
+          questionsContainer.appendChild(questionElement);
+        });
+      }
+      
+      startQuizBtn.addEventListener('click', () => {
+        trainingSection.classList.add('hidden');
+        quizSection.classList.remove('hidden');
+      });
+
+      quizForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        let score = 0;
+        const pointsPerQuestion = 5;
+        const totalPoints = quizData.length * pointsPerQuestion;
+        const iconCheck = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>`;
+        const iconWrong = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>`;
+
+        quizData.forEach((questionData, qIndex) => {
+          const questionElement = questionsContainer.children[qIndex];
+          const options = questionElement.querySelectorAll('.custom-radio');
+          const selectedOption = document.querySelector(`input[name="question${qIndex}"]:checked`);
+          
+          options.forEach(opt => opt.querySelector('input').disabled = true);
+          const correctLabel = options[questionData.correct].querySelector('label');
+          correctLabel.classList.add('correct-answer');
+          correctLabel.querySelector('.feedback-icon').innerHTML = iconCheck;
+          
+          if (selectedOption) {
+            if (parseInt(selectedOption.value) === questionData.correct) {
+              score += pointsPerQuestion;
+            } else {
+              const incorrectLabel = options[parseInt(selectedOption.value)].querySelector('label');
+              incorrectLabel.classList.add('incorrect-answer');
+              incorrectLabel.querySelector('.feedback-icon').innerHTML = iconWrong;
+            }
+          }
+        });
+        
+        document.getElementById('score').textContent = score;
+        document.getElementById('total-score').textContent = totalPoints;
+        const resultMessage = document.getElementById('result-message');
+        if (score === totalPoints) { resultMessage.textContent = "Excelente! Você acertou todas as questões!"; } 
+        else if (score >= totalPoints * 0.7) { resultMessage.textContent = "Ótimo trabalho! Você tem um bom conhecimento."; }
+        else { resultMessage.textContent = "Continue estudando para melhorar seus resultados."; }
+        
+        quizSection.classList.add('hidden');
+        resultsSection.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      
+      buildQuiz(); // Inicialização do quiz
+    });
+  </script>
+</body>
+</html>
