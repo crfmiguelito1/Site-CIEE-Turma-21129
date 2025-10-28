@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Padronizar processos e Reduzir as Falhas</title>
+ <!-- Favicon - Foguete Aprimore -->
+<link rel="icon" type="image/png" href="../imagens/logofoguete.png" sizes="96x96" />
+<link rel="apple-touch-icon" href="../imagens/logofoguete.png" />
+<link rel="shortcut icon" href="../imagens/logofoguete.png" />
+<link rel="manifest" href="../site.webmanifest" />
+<meta name="theme-color" content="#ffffff">
+
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+        body { font-family: 'Montserrat', sans-serif; background-color: #f8f9fa; }
+        .progress-bar { transition: width 0.2s ease-in-out; }
+        .course-card { background-color: #ffffff; border-radius: 12px; padding: 2.5rem; box-shadow: 0 8px 16px rgba(0,0,0,0.05); margin-top: 1.5rem; border: 1px solid #e5e7eb; }
+        .tab-button { padding: 1rem 1.5rem; font-weight: 600; color: #6b7280; border-bottom: 3px solid transparent; transition: all 0.3s ease; }
+        .tab-button:hover { background-color: #f9fafb; color: #4f46e5; }
+        .active-tab { color: #6A1B9A; border-bottom-color: #6A1B9A; }
+        .prose-styling p { font-size: 1.1rem; line-height: 1.8; color: #374151; }
+
+        /* ESTILOS DE BOTÕES E DISABLED (Modo Claro) */
+        button:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        button:disabled:hover {
+            background-color: #9ca3af;
+            transform: none;
+        }
+
+        /* ESTILOS DO QUIZ (Modo Claro) */
+        .option-btn {
+            transition: all 0.2s ease;
+            border: 2px solid #e5e7eb;
+            background-color: #f9fafb;
+            color: #374151;
+        }
+        .option-btn:hover:not(.disabled) { 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #f3f4f6;
+        }
+        .disabled {
+            pointer-events: none;
+            opacity: 0.8;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        .correct { border: 2px solid #10b981 !important; background-color: #d1fae5 !important; color: #065f46 !important; }
+        .incorrect { border: 2px solid #ef4444 !important; background-color: #fee2e2 !important; color: #991b1b !important; }
+        
+        /* ANIMAÇÃO DE TRANSIÇÃO (FADE) */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        /* Dark Mode Styles */
+        .dark body { background-color: #111827; color: #d1d5db; }
+        .dark .card, .dark .course-card { background-color: #1f2937; border: 1px solid #374151; }
+        .dark h1, .dark h2, .dark h3, .dark h4, .dark p, .dark span, .dark h6 { color: #f9fafb; }
+        .dark .sidebar { background-color: #1f2937; border-right: 1px solid #374151; }
+        .dark .text-gray-500, .dark .text-gray-600 { color: #9ca3af; }
+        .dark .tab-button { color: #9ca3af; }
+        .dark .active-tab { color: #a78bfa; border-bottom-color: #a78bfa; }
+        .dark .border-gray-200 { border-color: #374151; }
+        .dark .bg-white { background-color: #1f2937; }
+        
+        /* Dark Mode Quiz Overrides */
+        .dark .option-btn { background-color: #374151; color: #f9fafb; border-color: #4b5563; }
+        .dark .option-btn:hover:not(.disabled) { background-color: #4b5563; }
+        .dark .correct { border: 2px solid #34d399 !important; background-color: #065f46 !important; color: #d1fae5 !important; }
+        .dark .incorrect { border: 2px solid #f87171 !important; background-color: #991b1b !important; color: #fee2e2 !important; }
+        
+        .dark .bg-yellow-100 { background-color: #374151; }
+        .dark .text-yellow-800 { color: #facc15; }
+
+        /* ✅ CORREÇÃO DEFINITIVA PARA O TEXTO DA PERGUNTA DO QUIZ */
+        #quiz-container h4 {
+            color: #1f2937; /* Cor escura para o modo claro */
+        }
+        .dark #quiz-container h4 {
+            color: #f9fafb; /* Cor clara para o modo escuro */
+        }
+    </style>
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+    <header class="bg-gradient-to-r from-purple-700 to-orange-500 text-white p-4 shadow-md flex justify-between items-center sticky top-0 z-10">
+        <h1 class="text-2xl font-bold">Padronizar processos e Reduzir as Falhas</h1>
+        <a id="back-to-dashboard-link" class="bg-white text-purple-700 font-bold py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors duration-300">
+            <i class="fas fa-arrow-left mr-2"></i>Voltar ao Painel
+        </a>
+    </header>
+
+    <main class="p-4 md:p-8 max-w-5xl mx-auto">
+        <div id="training-section">
+            <div role="tablist" class="flex border-b border-gray-200 bg-white rounded-t-lg shadow-sm">
+                <button id="reading-tab" role="tab" class="tab-button active-tab">1. Padronização de Processos</button>
+                <button id="wellness-tab" role="tab" class="tab-button">2. Redução de Falhas</button>
+            </div>
+
+            <div class="course-card">
+                <div id="reading-panel" role="tabpanel">
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
+                        <div id="progressBarReading" class="progress-bar bg-orange-500 h-2.5 rounded-full w-0"></div>
+                    </div>
+                    <h2 class="text-4xl font-bold text-gray-800 mb-6">Padronização de Processos</h2>
+                    
+                    <div class="prose-styling space-y-6">
+                        <h3 class="text-2xl font-bold text-gray-800">É um prazer ter você conosco!</h3>
+                        <p>A padronização de processos é uma forma de organizar e melhorar as tarefas em uma empresa.</p>
+                        
+                        <h3 class="text-2xl font-bold text-gray-800 pt-4">Identifique os processos:</h3>
+                        <p></p>
+
+                        <h3 class="text-1xl font-bold text-gray-800 pt-4">Descubra quais são as tarefas importantes que precisam ser feitas.</h3>
+                        <p></p>
+                        <p><strong>Documente os processos:</strong> Escreva como cada tarefa deve ser feita.</p>
+                        <p><strong>Treine os funcionários:</strong> Ensine os funcionários a seguir os procedimentos padrão.</p>
+                        <p><strong>Monitore e ajuste:</strong> Verifique se os processos estão sendo seguidos corretamente e faça ajustes quando necessário.</p>
+                        <p><strong>Dicas:</strong> 
+                            <br> Faça auditorias regulares
+                            <br> Implemente controles de qualidade
+                            <br> Comunique-se com os funcionários
+                        </p>
+                    </div>
+
+                    <div class="text-center mt-12 pt-8 border-t border-gray-200">
+                        <img src="https://appcontabildata.blob.core.windows.net/noticias/7e3e2d10-a944-4f7e-a5ef-5c2d61bddc97.jpg" alt="Imagem ilustrativa de produtividade" class="mx-auto my-4 rounded-lg shadow-md max-w-full md:max-w-2xl">
+                        <p class="text-1xl font-bold text-gray-800 mb-6">Você chegou ao final do conteúdo de leitura sobre Produtividade!</p>
+                        <button id="next-to-wellness-btn" class="w-full md:w-auto inline-flex items-center justify-center px-8 py-3 border border-transparent text-lg font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 transition-transform transform hover:scale-105">
+                            Avançar para Bem-Estar <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="wellness-panel" role="tabpanel" class="hidden">
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
+                        <div id="progressBarWellness" class="progress-bar bg-green-500 h-2.5 rounded-full w-0"></div>
+                    </div>
+                    <h3 class="text-4xl font-bold text-gray-800 mb-6">Bem-Estar no Trabalho e Seu Sucesso</h3>
+                    
+                    <div class="prose-styling space-y-6">
+                        <h3 class="text-2xl font-bold text-gray-800">A Importância de Cuidar de Si Mesmo</h3>
+                        <p>Prezado(a) Colaborador(a), investir na promoção do bem-estar no trabalho beneficia tanto você quanto impacta positivamente os resultados da empresa. O bem-estar é considerado um dos pilares da gestão de pessoas, sendo cada vez mais imprescindível para o sucesso profissional.
+                        </p>
+                        <h3 class="text-2xl font-bold text-gray-800">Entendendo o Conceito</h3>
+                        <p>O bem-estar corporativo se refere ao equilíbrio físico, mental e emocional experimentado pelos trabalhadores no ambiente laboral. Ao atingir este estado, você se sente satisfeito, engajado e motivado profissionalmente. Sua saúde física e mental afeta diretamente seu rendimento. Pesquisas indicam que 83% dos colaboradores consideram o bem-estar tão importante quanto o salário, e 85% afirmam que este é um fator decisivo para permanecer no emprego.</p>
+                        
+                        <h3 class="text-2xl font-bold text-gray-800">O Que Você Valoriza e Busca</h3>
+                        <p>Os aspectos que constroem um ambiente com bem-estar organizacional, e que você deve priorizar em seu dia a dia, incluem:</p>
+                        <p><strong>Saúde Integral:</strong> Garanta hábitos benéficos à saúde. Valorize o clima organizacional que estimula o bem-estar psicológico e a gestão do estresse.</p>
+                        <p><strong>Crescimento:</strong> Busque oportunidades de crescimento e aprendizado.</p>
+                        <p><strong>Relacionamento:</strong> Contribua para um ambiente colaborativo, respeitoso e inclusivo, valorizando as individualidades.</p>
+                        <p><strong>Comunicação e Reconhecimento:</strong> Utilize a comunicação aberta para expressar opiniões e preocupações, ajudando a estabelecer um clima de confiança.</p>
+                        
+                        <h3 class="text-2xl font-bold text-gray-800">Sua Participação Ativa</h3>
+                        <p>Para manter um ambiente saudável, incentive o trabalho em equipe por meio de atividades de socialização e projetos conjuntos, fortalecendo o senso de pertencimento. Seu compromisso com o bem-estar é fundamental para a qualidade de vida e a sustentabilidade da organização.</p>
+                    </div>
+                    
+                    <div class="text-center mt-12 pt-8 border-t border-gray-200">
+                        <img src="https://midias.agazeta.com.br/2021/04/09/aceitar-os-sintomas-do-transtorno-mental-sao-passos-iniciais-para-cuidar-da-mente-470494-article.jpg" alt="Imagem ilustrativa de bem-estar" class="mx-auto my-4 rounded-lg shadow-md max-w-full md:max-w-2xl">
+                        <div class="text-center mt-12 pt-8 border-t border-gray-200">
+                            <div id="quiz-unlock-message" class="mb-4 p-4 bg-yellow-100 text-yellow-800 rounded-lg">
+                                <i class="fas fa-lock mr-2"></i>
+                                Role até o final para liberar o teste de conhecimento.
+                            </div>
+                            <button id="start-quiz-btn" class="w-full md:w-auto inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-white transition-transform transform hover:scale-105" disabled>
+                                Teste Bloqueado
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="quiz-section" class="hidden course-card">
+            <h2 class="text-3xl font-bold text-purple-700 mb-6">Quiz de Conhecimento: Produtividade e Bem-Estar</h2>
+            <p class="mb-8 text-xl text-gray-600">Selecione a resposta correta em cada pergunta.</p>
+            
+            <div id="quiz-container" class="space-y-6">
+                </div>
+            
+            <div id="quiz-navigation" class="flex justify-between mt-6 pt-4 border-t border-gray-200">
+                </div>
+        </div>
+        
+        <div id="results-section" class="hidden course-card text-center">
+            <h2 class="text-3xl font-bold text-purple-700 mb-4">Seus Resultados do Quiz!</h2>
+            <div id="score-display" class="text-5xl font-extrabold text-green-600 mb-6"></div>
+            <p id="balance-message" class="text-xl text-gray-700 mb-8"></p>
+            <a id="finish-training-link" class="bg-purple-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-purple-700 transition-colors duration-300">
+                <i class="fas fa-check-circle mr-2"></i> Finalizar Treinamento
+            </a>
+            <button onclick="window.location.reload()" class="mt-4 px-6 py-3 rounded-md bg-orange-600 text-white hover:bg-orange-700 transition-colors">Refazer Treinamento</button>
+        </div>
+    </main>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- ELEMENTOS DO DOM ---
+        const trainingSection = document.getElementById('training-section');
+        const quizSection = document.getElementById('quiz-section');
+        const resultsSection = document.getElementById('results-section');
+        const quizContainer = document.getElementById('quiz-container');
+        const quizNavigation = document.getElementById('quiz-navigation');
+        const startQuizBtn = document.getElementById('start-quiz-btn');
+        const quizUnlockMessage = document.getElementById('quiz-unlock-message');
+
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const readingPanel = document.getElementById('reading-panel');
+        const wellnessPanel = document.getElementById('wellness-panel');
+        
+        const progressBarReading = document.getElementById('progressBarReading');
+        const progressBarWellness = document.getElementById('progressBarWellness');
+        const nextToWellnessBtn = document.getElementById('next-to-wellness-btn');
+
+        // --- DADOS DO QUIZ ---
+        const quizQuestions = [
+            { 
+                question: "1. De acordo com o material, qual é a principal definição de ser produtivo?", 
+                options: ["Aumentar a carga de trabalho para entregar mais resultados", "Fazer muitas coisas ao mesmo tempo para maximizar a produção imediata", "Realizar tarefas com mais eficiência, aproveitando melhor o tempo e os recursos, sem abrir mão da qualidade", "Delegar o máximo de tarefas possível para se concentrar apenas nas mais difíceis"], 
+                correct: "Realizar tarefas com mais eficiência, aproveitando melhor o tempo e os recursos, sem abrir mão da qualidade", 
+                explanation: "Ser produtivo é fazer mais com qualidade, otimizando tempo e recursos." 
+            },
+            { 
+                question: "2. Qual das seguintes práticas é recomendada pelo material na dica sobre 'Organizar sua rotina'?", 
+                options: ["Realizar várias tarefas simultaneamente para otimizar o tempo", "Reservar o dia para avaliar os resultados e identificar melhorias", "Dar prioridade a uma tarefa, concluí-la e só então seguir para a próxima", "Utilizar softwares de gestão e cronômetros de produtividade."],
+                correct: "Dar prioridade a uma tarefa, concluí-la e só então seguir para a próxima", 
+                explanation: "A dica é evitar multitarefa: priorizar uma tarefa, concluir e seguir para a próxima." 
+            },
+            { 
+                question: "3. A dica de produtividade 'Aprimore sempre' sugere que o profissional deve reservar momentos para quê?", 
+                options: ["Buscar aprimoramento apenas quando houver desperdício ou insatisfação", "Avaliar seus resultados e identificar o que pode ser melhorado", "Anotar compromissos e usar listas de tarefas", "Manter um espaço de trabalho totalmente organizado e agradável"], 
+                correct: "Avaliar seus resultados e identificar o que pode ser melhorado", 
+                explanation: "A dica sugere que o profissional deve reservar momentos para avaliar e identificar melhorias." 
+            },
+            { 
+                question: "4. De acordo com o texto, quais são os benefícios gerados pela aplicação de boas práticas de produtividade?", 
+                options: ["Assegurar que os softwares de gestão sejam utilizados por todos os membros da equipe", "Entregar mais resultados, reduzir desperdícios e aumentar a satisfação de todos os envolvidos", "Eliminar totalmente a carga de trabalho e garantir o uso exclusivo de ferramentas tecnológicas", "Apenas aumentar a satisfação individual e garantir o controle de compromissos"], 
+                correct: "Entregar mais resultados, reduzir desperdícios e aumentar a satisfação de todos os envolvidos", 
+                explanation: "A aplicação de boas práticas de produtividade gera resultados mais eficazes e satisfação no ambiente de trabalho." 
+            },
+            { 
+                question: "5. De acordo com o texto, o bem-estar corporativo se refere a qual tipo de equilíbrio experimentado pelos trabalhadores?", 
+                options: ["Apenas satisfação e motivação profissional", "Equilíbrio financeiro e espiritual na vida pessoal", "Equilíbrio entre salário, benefícios e tempo de descanso", "Equilíbrio físico, mental e emocional no ambiente laboral"], 
+                correct: "Equilíbrio físico, mental e emocional no ambiente laboral", 
+                explanation: "O bem-estar corporativo abrange o equilíbrio físico, mental e emocional no ambiente de trabalho." 
+            },
+            { 
+                question: "6. Qual dado estatístico é apresentado no texto para reforçar a importância do bem-estar para o colaborador?", 
+                options: ["50% dos colaboradores consideram o bem-estar mais importante que o salário", "Apenas 15% dos colaboradores consideram o bem-estar tão importante quanto o salário", "83% dos colaboradores sentem-se engajados devido ao bom clima", "85% dos colaboradores afirmam que o bem-estar é um fator decisivo para permanecer no emprego"], 
+                correct: "85% dos colaboradores afirmam que o bem-estar é um fator decisivo para permanecer no emprego", 
+                explanation: "O texto cita que 85% dos colaboradores afirmam que o bem-estar é um fator decisivo para continuar na empresa." 
+            },
+            { 
+                question: "7. No aspecto 'Saúde Integral', o que o colaborador deve valorizar e priorizar, além dos hábitos benéficos à saúde?", 
+                options: ["Utilizar a comunicação aberta para expressar opiniões e preocupações", "Contribuir para um ambiente respeitoso e inclusivo", "Buscar oportunidades de crescimento e aprendizado constantes", "O clima organizacional que estimula o bem-estar psicológico e a gestão do estresse"], 
+                correct: "O clima organizacional que estimula o bem-estar psicológico e a gestão do estresse", 
+                explanation: "No aspecto 'Saúde Integral', deve-se valorizar o clima organizacional que estimula o bem-estar psicológico." 
+            },
+            {
+                question: "8. Qual é o papel da 'Participação Ativa' do colaborador, de acordo com o texto, para fortalecer o senso de pertencimento?", 
+                options: ["Focar apenas na gestão do estresse individual", "Incentivar o trabalho em equipe por meio de atividades de socialização e projetos conjuntos", "Delegar tarefas para aumentar o tempo de descanso", "Exigir que a empresa promova um aumento salarial e melhores benefícios"], 
+                correct: "Incentivar o trabalho em equipe por meio de atividades de socialização e projetos conjuntos", 
+                explanation: "A 'Participação Ativa' envolve incentivar o trabalho em equipe através de atividades e projetos conjuntos." 
+            }
+        ];
+        
+        // --- VARIÁVEIS DE CONTROLE ---
+        let isQuizUnlocked = false;
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(quizQuestions.length).fill(null);
+        let score = 0;
+        const totalQuestions = quizQuestions.length;
+
+        // --- FUNÇÕES DO QUIZ ---
+
+        function calculateScore() {
+            score = userAnswers.filter((answer, index) => answer === quizQuestions[index].correct).length;
+        }
+
+        function renderQuestion() {
+            if (currentQuestionIndex >= totalQuestions) {
+                showResults();
+                return;
+            }
+
+            quizContainer.innerHTML = '';
+            quizNavigation.innerHTML = '';
+            const q = quizQuestions[currentQuestionIndex];
+            const hasAnswered = userAnswers[currentQuestionIndex] !== null;
+
+            const questionElement = document.createElement('div');
+            questionElement.classList.add('fade-in');
+            
+            let optionsHTML = '';
+            q.options.forEach(option => {
+                let classes = "option-btn block w-full text-left px-6 py-3 rounded-lg font-medium";
+                if (hasAnswered) {
+                    classes += ' disabled';
+                    if (option === q.correct) {
+                        classes += ' correct';
+                    } else if (option === userAnswers[currentQuestionIndex]) {
+                        classes += ' incorrect';
+                    }
+                }
+                optionsHTML += `<button class="${classes}" data-answer-text="${option}">${option}</button>`;
+            });
+
+            let feedbackHTML = '';
+            if (hasAnswered) {
+                const isCorrect = userAnswers[currentQuestionIndex] === q.correct;
+                const colorClass = isCorrect ? 'text-green-800 dark:text-green-400' : 'text-red-800 dark:text-red-400';
+                const icon = isCorrect ? '✔️' : '❌';
+                feedbackHTML = `<p class="${colorClass}">${icon} ${q.explanation}</p>`;
+            }
+
+            questionElement.innerHTML = `
+                <h4 class="text-xl font-bold mb-6">${q.question}</h4>
+                <div class="options-container space-y-3">${optionsHTML}</div>
+                <div class="mt-4 text-center font-bold">${feedbackHTML}</div>
+            `;
+            quizContainer.appendChild(questionElement);
+
+            if (!hasAnswered) {
+                document.querySelectorAll('.option-btn').forEach(btn => {
+                    btn.addEventListener('click', checkAnswer);
+                });
+            }
+
+            renderNavigationButtons();
+            window.scrollTo(0, quizSection.offsetTop);
+        }
+
+        function checkAnswer(event) {
+            const selectedOptionText = event.currentTarget.getAttribute('data-answer-text');
+            userAnswers[currentQuestionIndex] = selectedOptionText;
+            renderQuestion();
+        }
+
+        function renderNavigationButtons() {
+            const hasAnswered = userAnswers[currentQuestionIndex] !== null;
+            const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
+
+            const backButton = document.createElement('button');
+            backButton.innerHTML = `<i class="fas fa-arrow-left mr-2"></i> Voltar`;
+            backButton.className = "inline-flex items-center justify-center px-6 py-2 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-gray-50 hover:bg-gray-200 dark:bg-gray-600 dark:text-gray-100 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors";
+            backButton.style.visibility = currentQuestionIndex > 0 ? 'visible' : 'hidden';
+            backButton.onclick = () => {
+                currentQuestionIndex--;
+                renderQuestion();
+            };
+
+            const nextButton = document.createElement('button');
+            nextButton.innerHTML = isLastQuestion ? `Finalizar <i class="fas fa-check-circle ml-2"></i>` : `Avançar <i class="fas fa-arrow-right ml-2"></i>`;
+            nextButton.className = "inline-flex items-center justify-center px-6 py-2 border border-transparent text-base font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 transition-colors";
+            nextButton.disabled = !hasAnswered;
+            nextButton.onclick = () => {
+                if (isLastQuestion) {
+                    showResults();
+                } else {
+                    currentQuestionIndex++;
+                    renderQuestion();
+                }
+            };
+            
+            quizNavigation.appendChild(backButton);
+            quizNavigation.appendChild(nextButton);
+        }
+
+        function showResults() {
+            calculateScore();
+            const scoreDisplay = document.getElementById('score-display');
+            const balanceMessage = document.getElementById('balance-message');
+
+            quizSection.classList.add('hidden');
+            resultsSection.classList.remove('hidden');
+
+            const percentage = (score / totalQuestions) * 100;
+            scoreDisplay.textContent = `${score} / ${totalQuestions}`;
+            scoreDisplay.classList.remove('text-green-600', 'text-yellow-600', 'text-red-600');
+
+            if (percentage === 100) {
+                balanceMessage.textContent = 'Parabéns! Você demonstrou total domínio sobre Produtividade e Bem-Estar. Excelente trabalho!';
+                scoreDisplay.classList.add('text-green-600');
+            } else if (percentage >= 75) {
+                balanceMessage.textContent = 'Ótimo resultado! Você absorveu a maior parte do conteúdo. Continue aprimorando seu foco e bem-estar.';
+                scoreDisplay.classList.add('text-yellow-600');
+            } else {
+                balanceMessage.textContent = 'Você demonstrou conhecimento, mas pode revisar os módulos para reforçar os conceitos. Lembre-se, o sucesso está no aprendizado contínuo!';
+                scoreDisplay.classList.add('text-red-600');
+            }
+            window.scrollTo(0, resultsSection.offsetTop);
+        }
+
+        // --- FUNÇÕES DE NAVEGAÇÃO / PROGRESO (Originais mantidas) ---
+
+        function switchTab(clickedTabId) {
+            tabButtons.forEach(button => button.classList.remove('active-tab'));
+            if (clickedTabId === 'wellness-tab') {
+                document.getElementById('wellness-tab').classList.add('active-tab');
+                readingPanel.classList.add('hidden');
+                wellnessPanel.classList.remove('hidden');
+            } else {
+                document.getElementById('reading-tab').classList.add('active-tab');
+                wellnessPanel.classList.add('hidden');
+                readingPanel.classList.remove('hidden');
+            }
+            window.scrollTo(0, 0);
+        }
+
+        function updateActiveTabProgress() {
+            const scrollPosition = window.scrollY;
+            const clientHeight = document.documentElement.clientHeight;
+            const trainingHeight = trainingSection.offsetHeight;
+            const trainingScrollTop = scrollPosition - trainingSection.offsetTop;
+            const maxTrainingScroll = trainingHeight > clientHeight ? trainingHeight - clientHeight : 1;
+            const progressInTraining = Math.min(Math.max(0, trainingScrollTop) / maxTrainingScroll, 1) * 100;
+
+            if (!readingPanel.classList.contains('hidden')) {
+                progressBarReading.style.width = Math.min(progressInTraining, 100) + '%';
+            } else if (!wellnessPanel.classList.contains('hidden') && !isQuizUnlocked) {
+                progressBarWellness.style.width = Math.min(progressInTraining, 100) + '%';
+                if (Math.min(progressInTraining, 100) >= 95) {
+                    isQuizUnlocked = true;
+                    startQuizBtn.disabled = false;
+                    startQuizBtn.textContent = 'Estou pronto para o teste!';
+                    startQuizBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+                    quizUnlockMessage.style.display = 'none';
+                }
+            }
+        }
+
+        // --- EVENT LISTENERS ---
+
+        tabButtons.forEach(button => button.addEventListener('click', () => switchTab(button.id)));
+        nextToWellnessBtn.addEventListener('click', () => switchTab('wellness-tab'));
+        startQuizBtn.addEventListener('click', () => {
+            if (isQuizUnlocked) {
+                trainingSection.classList.add('hidden');
+                quizSection.classList.remove('hidden');
+                currentQuestionIndex = 0;
+                userAnswers.fill(null);
+                score = 0;
+                renderQuestion();
+            }
+        });
+
+        function throttle(func, limit) {
+            let inThrottle;
+            return function(...args) {
+                if (!inThrottle) {
+                    func.apply(this, args);
+                    inThrottle = true;
+                    setTimeout(() => inThrottle = false, limit);
+                }
+            }
+        }
+        window.addEventListener('scroll', throttle(updateActiveTabProgress, 100));
+
+        const backLink = document.getElementById('back-to-dashboard-link');
+        if (backLink) {
+            const userRole = localStorage.getItem('userRole');
+            backLink.href = (userRole === 'Empresa') ? "Empresa.html" : "painel.html";
+        }
+
+        const finishTrainingLink = document.getElementById('finish-training-link');
+        if (finishTrainingLink) {
+            const userRole = localStorage.getItem('userRole');
+            finishTrainingLink.href = (userRole === 'Empresa') ? "Empresa.html" : "painel.html";
+        }
+    });
+    </script>
+</body>
+</html>
