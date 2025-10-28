@@ -95,9 +95,9 @@
                 localStorage.setItem('currentUser', 'CIEE'); // Salva o nome do usuário
                 localStorage.setItem('userRole', 'Empresa'); // Salva o cargo
                 window.location.href = "Empresa.html";
-            } else if (usuario === "cadu" && senha === "vipal") {
-                localStorage.setItem('currentUser', 'Cadu'); // Salva o nome do usuário
-                localStorage.setItem('userRole', 'aluno'); // Salva o cargo
+            } else if (usuario === "colaborador" && senha === "ciee") {
+                localStorage.setItem('currentUser', 'Colaborador'); // Salva o nome do usuário
+                localStorage.setItem('userRole', 'Colaborador'); // Salva o cargo
                 window.location.href = "painel.html";
             } else {
                 alert("Usuário ou senha incorretos!");
