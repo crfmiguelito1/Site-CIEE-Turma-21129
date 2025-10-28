@@ -18,7 +18,6 @@
     </script>
     
     <style>
-        /* Estilos da barra de rolagem (opcional) */
         .chat-area::-webkit-scrollbar { width: 8px; }
         .chat-area::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
         .chat-area::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
@@ -26,8 +25,6 @@
         .dark .chat-area::-webkit-scrollbar-track { background: #2d3748; }
         .dark .chat-area::-webkit-scrollbar-thumb { background: #4a5568; }
         .dark .chat-area::-webkit-scrollbar-thumb:hover { background: #718096; }
-
-        /* Estilo para o modal */
         .modal-bg {
             background-color: rgba(0, 0, 0, 0.5);
             transition: opacity 0.3s ease;
@@ -151,7 +148,7 @@
                 backLink.href = (userRole === 'Empresa') ? "Empresa.html" : "painel.html";
             }
 
-            // --- [NOVO] CHAVE DE ARMAZENAMENTO E ELEMENTOS PRINCIPAIS ---
+            // --- CHAVE DE ARMAZENAMENTO E ELEMENTOS PRINCIPAIS ---
             const STORAGE_KEY = 'forumPostsHTML';
             const chatArea = document.getElementById('chat-area');
             const btnCriarTopico = document.getElementById('btn-criar-topico');
@@ -162,7 +159,7 @@
             const inputEnviar = document.getElementById('input-enviar-mensagem');
             const inputBuscar = document.getElementById('input-buscar');
 
-            // --- [NOVA FUNÇÃO] PARA CARREGAR POSTS SALVOS ---
+            // --- FUNÇÃO PARA CARREGAR POSTS SALVOS ---
             function loadPosts() {
                 const savedPosts = localStorage.getItem(STORAGE_KEY);
                 if (savedPosts) {
@@ -170,13 +167,27 @@
                 }
             }
 
-            // --- [NOVA FUNÇÃO] PARA SALVAR NOVO POST ---
+            // --- FUNÇÃO PARA SALVAR NOVO POST ---
             function savePost(newPostHTML) {
                 const currentPosts = localStorage.getItem(STORAGE_KEY) || '';
                 localStorage.setItem(STORAGE_KEY, currentPosts + newPostHTML);
             }
+            
+            // --- [NOVA FUNÇÃO] PARA ATUALIZAR O STORAGE APÓS DELETAR ---
+            function updateSavedPosts() {
+                // Seleciona APENAS os posts criados pelo usuário
+                const userPosts = document.querySelectorAll('.forum-post.user-post');
+                
+                let newHtmlStorage = '';
+                userPosts.forEach(post => {
+                    newHtmlStorage += post.outerHTML; // Salva o HTML externo de cada post
+                });
+                
+                // Sobrescreve o localStorage com a nova lista de posts
+                localStorage.setItem(STORAGE_KEY, newHtmlStorage);
+            }
 
-            // --- [NOVA CHAMADA] CARREGA OS POSTS QUANDO A PÁGINA ABRE ---
+            // --- CARREGA OS POSTS QUANDO A PÁGINA ABRE ---
             loadPosts();
 
             // --- 1. FUNCIONALIDADE: MODAL "CRIAR TÓPICO" ---
@@ -200,15 +211,19 @@
                 const userName = localStorage.getItem('currentUser') || 'Você';
                 const userInitial = userName.charAt(0).toUpperCase();
 
+                // [MODIFICADO] Adicionada classe 'user-post' e o botão 'Excluir'
                 const newPostHTML = `
-                <div class="flex items-start gap-3 forum-post">
+                <div class="flex items-start gap-3 forum-post user-post">
                     <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white font-bold">
                         ${userInitial}
                     </div>
                     <div class="w-full">
-                        <div class="flex justify-between items-baseline">
-                            <span class="font-semibold text-gray-800 dark:text-gray-100">${userName}</span>
-                            <span class="text-xs text-gray-500 dark:text-gray-400">Agora</span>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-baseline">
+                                <span class="font-semibold text-gray-800 dark:text-gray-100">${userName}</span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">Agora</span>
+                            </div>
+                            <span class="text-xs text-red-500 hover:text-red-700 cursor-pointer font-medium btn-excluir">Excluir</span>
                         </div>
                         <h3 class="text-lg font-semibold mt-1 dark:text-white">${titulo}</h3>
                         <div class="mt-1 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg rounded-tl-none">
@@ -217,7 +232,6 @@
                     </div>
                 </div>`;
 
-                // [MODIFICADO] Salva antes de adicionar ao HTML
                 savePost(newPostHTML);
                 chatArea.innerHTML += newPostHTML;
                 modal.classList.add('hidden'); 
@@ -236,15 +250,19 @@
                 const userName = localStorage.getItem('currentUser') || 'Você';
                 const userInitial = userName.charAt(0).toUpperCase();
 
+                // [MODIFICADO] Adicionada classe 'user-post' e o botão 'Excluir'
                 const newReplyHTML = `
-                <div class="flex items-start gap-3 forum-post">
+                <div class="flex items-start gap-3 forum-post user-post">
                     <div class="flex-shrink-0 w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold">
                         ${userInitial}
                     </div>
                     <div class="w-full">
-                        <div class="flex justify-between items-baseline">
-                            <span class="font-semibold text-gray-800 dark:text-gray-100">${userName}</span>
-                            <span class="text-xs text-gray-500 dark:text-gray-400">Agora</span>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-baseline">
+                                <span class="font-semibold text-gray-800 dark:text-gray-100">${userName}</span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">Agora</span>
+                            </div>
+                            <span class="text-xs text-red-500 hover:text-red-700 cursor-pointer font-medium btn-excluir">Excluir</span>
                         </div>
                         <div class="mt-1 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg rounded-tl-none">
                             <p>${mensagem}</p>
@@ -252,7 +270,6 @@
                     </div>
                 </div>`;
 
-                // [MODIFICADO] Salva antes de adicionar ao HTML
                 savePost(newReplyHTML);
                 chatArea.innerHTML += newReplyHTML;
                 inputEnviar.value = '';
@@ -270,7 +287,6 @@
             // --- 3. FUNCIONALIDADE: "BUSCAR" ---
             inputBuscar.addEventListener('keyup', () => {
                 const termo = inputBuscar.value.toLowerCase();
-                // Importante: QuerySelectorAll busca os posts estáticos E os que foram adicionados
                 const posts = document.querySelectorAll('.forum-post'); 
 
                 posts.forEach(post => {
@@ -281,6 +297,28 @@
                         post.classList.add('hidden');
                     }
                 });
+            });
+
+            // --- [NOVO] 4. FUNCIONALIDADE: "EXCLUIR" POST ---
+            // Usa "event delegation" para ouvir cliques em botões que ainda não existem
+            chatArea.addEventListener('click', function(e) {
+                // Verifica se o alvo do clique foi um botão de excluir
+                if (e.target.classList.contains('btn-excluir')) {
+                    
+                    // Pede confirmação
+                    if (confirm('Tem certeza que deseja excluir esta postagem?')) {
+                        // Encontra o 'card' da postagem mais próximo
+                        const postToDelete = e.target.closest('.forum-post');
+                        
+                        if (postToDelete) {
+                            // 1. Remove o post da tela (DOM)
+                            postToDelete.remove();
+                            
+                            // 2. Atualiza o localStorage para refletir a remoção
+                            updateSavedPosts();
+                        }
+                    }
+                }
             });
 
         });
