@@ -141,14 +141,14 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // --- LÓGICA DO LINK "VOLTAR" ---
+            
             const backLink = document.getElementById('back-to-dashboard-link');
             if (backLink) {
                 const userRole = localStorage.getItem('userRole');
                 backLink.href = (userRole === 'Empresa') ? "Empresa.html" : "painel.html";
             }
 
-            // --- CHAVE DE ARMAZENAMENTO E ELEMENTOS PRINCIPAIS ---
+            
             const STORAGE_KEY = 'forumPostsHTML';
             const chatArea = document.getElementById('chat-area');
             const btnCriarTopico = document.getElementById('btn-criar-topico');
@@ -159,7 +159,7 @@
             const inputEnviar = document.getElementById('input-enviar-mensagem');
             const inputBuscar = document.getElementById('input-buscar');
 
-            // --- FUNÇÃO PARA CARREGAR POSTS SALVOS ---
+            
             function loadPosts() {
                 const savedPosts = localStorage.getItem(STORAGE_KEY);
                 if (savedPosts) {
@@ -167,30 +167,30 @@
                 }
             }
 
-            // --- FUNÇÃO PARA SALVAR NOVO POST ---
+            
             function savePost(newPostHTML) {
                 const currentPosts = localStorage.getItem(STORAGE_KEY) || '';
                 localStorage.setItem(STORAGE_KEY, currentPosts + newPostHTML);
             }
             
-            // --- [NOVA FUNÇÃO] PARA ATUALIZAR O STORAGE APÓS DELETAR ---
+            
             function updateSavedPosts() {
-                // Seleciona APENAS os posts criados pelo usuário
+                
                 const userPosts = document.querySelectorAll('.forum-post.user-post');
                 
                 let newHtmlStorage = '';
                 userPosts.forEach(post => {
-                    newHtmlStorage += post.outerHTML; // Salva o HTML externo de cada post
+                    newHtmlStorage += post.outerHTML; 
                 });
                 
-                // Sobrescreve o localStorage com a nova lista de posts
+                
                 localStorage.setItem(STORAGE_KEY, newHtmlStorage);
             }
 
-            // --- CARREGA OS POSTS QUANDO A PÁGINA ABRE ---
+            
             loadPosts();
 
-            // --- 1. FUNCIONALIDADE: MODAL "CRIAR TÓPICO" ---
+            
             btnCriarTopico.addEventListener('click', () => {
                 modal.classList.remove('hidden');
             });
@@ -211,7 +211,7 @@
                 const userName = localStorage.getItem('currentUser') || 'Você';
                 const userInitial = userName.charAt(0).toUpperCase();
 
-                // [MODIFICADO] Adicionada classe 'user-post' e o botão 'Excluir'
+                
                 const newPostHTML = `
                 <div class="flex items-start gap-3 forum-post user-post">
                     <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white font-bold">
@@ -242,7 +242,7 @@
                 chatArea.scrollTop = chatArea.scrollHeight;
             });
 
-            // --- 2. FUNCIONALIDADE: "ENVIAR" RESPOSTA RÁPIDA ---
+            
             function enviarResposta() {
                 const mensagem = inputEnviar.value;
                 if (mensagem.trim() === '') return;
@@ -250,7 +250,7 @@
                 const userName = localStorage.getItem('currentUser') || 'Você';
                 const userInitial = userName.charAt(0).toUpperCase();
 
-                // [MODIFICADO] Adicionada classe 'user-post' e o botão 'Excluir'
+                
                 const newReplyHTML = `
                 <div class="flex items-start gap-3 forum-post user-post">
                     <div class="flex-shrink-0 w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold">
@@ -284,7 +284,7 @@
                 }
             });
 
-            // --- 3. FUNCIONALIDADE: "BUSCAR" ---
+            
             inputBuscar.addEventListener('keyup', () => {
                 const termo = inputBuscar.value.toLowerCase();
                 const posts = document.querySelectorAll('.forum-post'); 
@@ -299,22 +299,21 @@
                 });
             });
 
-            // --- [NOVO] 4. FUNCIONALIDADE: "EXCLUIR" POST ---
-            // Usa "event delegation" para ouvir cliques em botões que ainda não existem
+            
             chatArea.addEventListener('click', function(e) {
-                // Verifica se o alvo do clique foi um botão de excluir
+                
                 if (e.target.classList.contains('btn-excluir')) {
                     
-                    // Pede confirmação
+                    
                     if (confirm('Tem certeza que deseja excluir esta postagem?')) {
-                        // Encontra o 'card' da postagem mais próximo
+                        
                         const postToDelete = e.target.closest('.forum-post');
                         
                         if (postToDelete) {
-                            // 1. Remove o post da tela (DOM)
+                            
                             postToDelete.remove();
                             
-                            // 2. Atualiza o localStorage para refletir a remoção
+                            
                             updateSavedPosts();
                         }
                     }
