@@ -96,24 +96,36 @@
     </div>
     <script src="../JS/settings.js"></script>
     <script>    
-    document.addEventListener('DOMContentLoaded', () => {
-        const backLink = document.getElementById('back-to-dashboard-link');
+document.addEventListener('DOMContentLoaded', () => {
+    const backLink = document.getElementById('back-to-dashboard-link');
+
+    if (backLink) {
         
-        if (backLink) {
-            const userRole = localStorage.getItem('userRole');
+        const params = new URLSearchParams(window.location.search);
+        const cameFrom = params.get('from');
+
+        
+        const userRole = localStorage.getItem('userRole');
+
+        
+        if (cameFrom === 'forum') {
+            backLink.href = "forum.html";
+            backLink.innerHTML = '<i class="fas fa-arrow-left mr-2"></i>Voltar ao Fórum'; // Muda o texto
+        } else if (userRole === 'Empresa') {
+            backLink.href = "Empresa.html";
             
-            if (userRole === 'Empresa') {
-                backLink.href = "Empresa.html";
-            } else {
-                backLink.href = "painel.html";
-            }
+        } else {
+            
+            backLink.href = "painel.html";
         }
-        
-        const usernameDisplay = document.querySelector('.username-display');
-        if (usernameDisplay) {
-            usernameDisplay.textContent = localStorage.getItem('currentUser') || 'Usuário';
-        }
-    });
-    </script>
+    }
+
+    
+    const usernameDisplay = document.querySelector('.username-display');
+    if (usernameDisplay) {
+        usernameDisplay.textContent = localStorage.getItem('currentUser') || 'Usuário';
+    }
+});
+</script>
 </body>
 </html>
