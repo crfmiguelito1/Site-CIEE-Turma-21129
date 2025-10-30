@@ -8,6 +8,7 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <script>
         if (localStorage.getItem('theme') === 'dark') {
@@ -18,102 +19,138 @@
     </script>
     
     <style>
+        :root{ --cor-roxa-principal:#6A1B9A; --cor-roxa-clara:#E1BEE7; --cor-laranja-destaque:#F57C00; --cor-branca:#FFFFFF; --cor-texto-principal:#333; --cor-fundo:#F8F9FA; --sombra-padrao:0 4px 12px rgba(0,0,0,0.08); }
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+        *{box-sizing:border-box}
+        body{ font-family:'Montserrat',sans-serif; margin:0; background:var(--cor-fundo); color:var(--cor-texto-principal); display:flex; min-height:100vh; }
+        .sidebar{ width:250px; background:var(--cor-roxa-principal); color:var(--cor-branca); padding:20px; height:100vh; position:sticky; top:0; display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid #5a1682; }
+        .sidebar h1{font-size:2.5rem;text-align:center;margin:0 0 24px; font-weight:700;} /* Ajuste do font-size e font-weight */
+        .sidebar nav ul{list-style:none;padding:0;margin:0}
+        .sidebar nav li a{ display:flex; align-items:center; gap:12px; color:var(--cor-branca); text-decoration:none; padding:12px 16px; border-radius:8px; margin-bottom:8px; font-weight:600; transition:background .2s; }
+        .sidebar nav li a:hover, .sidebar nav li a.ativo{background:rgba(255,255,255,0.12)}
+        .main-content{flex:1;padding:28px; overflow-y: auto; height: 100vh;}
+        .card{background:var(--cor-branca);padding:22px;border-radius:12px;box-shadow:var(--sombra-padrao)}
+        .btn-logout { background: #dc3545; color: var(--cor-branca); text-align: center; padding: 12px 16px; border-radius: 8px; margin-top: 20px; cursor: pointer; font-weight: 600; text-decoration: none; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-logout:hover { background: #c82333; }
+        .dark body { --cor-fundo: #111827; --cor-texto-principal: #d1d5db; }
+        .dark .card { background-color: #1f2937; border: 1px solid #374151; }
+        .dark h2, .dark h4, .dark p { color: #f9fafb; }
+        .dark .sidebar { background-color: #1f2937; border-right-color: #374151; }
+
         .chat-area::-webkit-scrollbar { width: 8px; }
         .chat-area::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
         .chat-area::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
-        .chat-area::-webkit-scrollbar-thumb:hover { background: #aaa; }
         .dark .chat-area::-webkit-scrollbar-track { background: #2d3748; }
         .dark .chat-area::-webkit-scrollbar-thumb { background: #4a5568; }
-        .dark .chat-area::-webkit-scrollbar-thumb:hover { background: #718096; }
         .modal-bg {
             background-color: rgba(0, 0, 0, 0.5);
             transition: opacity 0.3s ease;
         }
+        .dark #modal-criar-topico h3 { color: #f9fafb; }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
 
-    <header class="bg-gradient-to-r from-purple-700 to-orange-500 text-white p-4 shadow-md flex justify-between items-center sticky top-0 z-10">
-        <h1 class="text-2xl font-bold">Fórum – Espaço de Conversas</h1>
-        <a id="back-to-dashboard-link" class="bg-white text-purple-700 font-bold py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors duration-300">
-            <i class="fas fa-arrow-left mr-2"></i>Voltar ao Painel
-        </a>
-    </header>
-
-    <main class="p-4 md:p-8 max-w-4xl mx-auto">
-        
-        <div class="bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden">
-            
-            <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex flex-col md:flex-row gap-4 justify-between items-center">
-                <div class="relative w-full md:w-auto">
-                    <span class="absolute left-3 top-2.5 text-gray-400">
-                        <i class="fas fa-search"></i>
-                    </span>
-                    <input type="text" id="input-buscar" placeholder="Buscar" class="pl-10 pr-4 py-2 w-full md:w-80 border-2 border-purple-500 rounded-lg bg-gray-100 dark:bg-gray-700 dark:border-purple-500 focus:outline-none">
-                </div>
-                <button id="btn-criar-topico" class="w-full md:w-auto bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors">
-                    <i class="fas fa-plus mr-2"></i>Criar tópico
-                </button>
-            </div>
-
-            <div id="chat-area" class="p-6 space-y-6 h-[60vh] overflow-y-auto chat-area">
-                
-                <div class="flex items-start gap-3 forum-post">
-                    <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-                        M
-                    </div>
-                    <div class="w-full">
-                        <div class="flex justify-between items-baseline">
-                            <span class="font-semibold text-gray-800 dark:text-gray-100">Maria</span>
-                            <span class="text-xs text-gray-500 dark:text-gray-400">10:32</span>
-                        </div>
-                        <div class="mt-1 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg rounded-tl-none">
-                            <p>Gente, vocês já aplicaram alguma estratégia para reduzir a rotatividade na empresa de vocês?</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-start gap-3 forum-post">
-                    <div class="flex-shrink-0 w-10 h-10 rounded-full bg-pink-500 flex items-center justify-center text-white font-bold">
-                        P
-                    </div>
-                    <div class="w-full">
-                        <div class="flex justify-between items-baseline">
-                            <span class="font-semibold text-gray-800 dark:text-gray-100">Pedro</span>
-                            <span class="text-xs text-gray-500 dark:text-gray-400">10:35</span>
-                        </div>
-                        <div class="mt-1 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg rounded-tl-none">
-                            <p>Aqui começamos com feedback mensal entre líderes e funcionários, melhorou muito!</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-start gap-3 forum-post">
-                    <div class="flex-shrink-0">
-                        <img src="https://i.pravatar.cc/150?img=31" alt="Avatar Ana" class="w-10 h-10 rounded-full object-cover">
-                    </div>
-                    <div class="w-full">
-                        <div class="flex justify-between items-baseline">
-                            <span class="font-semibold text-gray-800 dark:text-gray-100">Ana</span>
-                            <span class="text-xs text-gray-500 dark:text-gray-400">10:40</span>
-                        </div>
-                        <div class="mt-1 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg rounded-tl-none">
-                            <p>Na minha empresa, quando ofereceram plano de carreira, diminuiu bastante o turnover.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                </div>
-
-            <div class="p-4 bg-gray-100 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600 flex gap-3 items-center">
-                <input type="text" id="input-enviar-mensagem" placeholder="Digite sua mensagem aqui..." class="flex-1 px-4 py-3 border rounded-lg bg-white dark:bg-gray-800 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500">
-                <button id="btn-enviar-mensagem" class="font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-800 transition-colors px-3">
-                    Enviar
-                </button>
-            </div>
-
+    <aside class="sidebar">
+        <div>
+            <h1 class="flex flex-row items-center justify-center gap-3 mb-6">
+                <img src="../imagens/logofoguete.png" alt="Logo" class="w-10"> 
+                <span>Aprimore</span>
+            </h1>
+            <nav>
+                <ul>
+                    <li><a href="painel.html#dashboard" class="menu-link"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+                    <li><a href="painel.html#treinamentos" class="menu-link"><i class="fa-solid fa-chalkboard-user"></i> Treinamentos</a></li>
+                    <li><a href="painel.html#progresso" class="menu-link"><i class="fa-solid fa-chart-line"></i> Progresso</a></li>
+                    <li><a href="painel.html#quemsomos" class="menu-link"><i class="fa-solid fa-info-circle"></i> Quem Somos</a></li>
+                    <li><a href="forum.html" class="menu-link ativo"><i class="fa-solid fa-comments"></i> Fórum</a></li>
+                    <li><a href="settings.html"><i class="fa-solid fa-gear"></i> Configurações</a></li>
+                </ul>
+            </nav>
         </div>
-    </main>
+        <a href="javascript:void(0)" class="btn-logout" onclick="logout()">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i> Sair
+        </a>
+    </aside>
+
+    <div class="main-content">
+
+        <main>
+            
+            <div class="bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden flex flex-col h-full" style="max-height: calc(100vh - 56px);">
+                
+                <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex flex-col md:flex-row gap-4 justify-between items-center flex-shrink-0">
+                    <div class="relative w-full md:w-auto">
+                        <span class="absolute left-3 top-2.5 text-gray-400">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" id="input-buscar" placeholder="Buscar" class="pl-10 pr-4 py-2 w-full md:w-80 border-2 border-purple-500 rounded-lg bg-gray-100 dark:bg-gray-700 dark:border-purple-500 focus:outline-none">
+                    </div>
+                    <button id="btn-criar-topico" class="w-full md:w-auto bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-plus mr-2"></i>Criar tópico
+                    </button>
+                </div>
+
+                <div id="chat-area" class="p-6 space-y-6 overflow-y-auto chat-area flex-grow">
+                    
+                    <div class="flex items-start gap-3 forum-post">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                            M
+                        </div>
+                        <div class="w-full">
+                            <div class="flex justify-between items-baseline">
+                                <span class="font-semibold text-gray-800 dark:text-gray-100">Maria</span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400">10:32</span>
+                            </div>
+                            <div class="mt-1 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg rounded-tl-none">
+                                <p>Gente, vocês já aplicaram alguma estratégia para reduzir a rotatividade na empresa de vocês?</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3 forum-post">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-pink-500 flex items-center justify-center text-white font-bold">
+                            P
+                        </div>
+                        <div class="w-full">
+                            <div class="flex justify-between items-baseline">
+                                <span class="font-semibold text-gray-800 dark:text-gray-100">Pedro</span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400">10:35</span>
+                            </div>
+                            <div class="mt-1 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg rounded-tl-none">
+                                <p>Aqui começamos com feedback mensal entre líderes e funcionários, melhorou muito!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3 forum-post">
+                        <div class="flex-shrink-0">
+                            <img src="https://i.pravatar.cc/150?img=31" alt="Avatar Ana" class="w-10 h-10 rounded-full object-cover">
+                        </div>
+                        <div class="w-full">
+                            <div class="flex justify-between items-baseline">
+                                <span class="font-semibold text-gray-800 dark:text-gray-100">Ana</span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400">10:40</span>
+                            </div>
+                            <div class="mt-1 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg rounded-tl-none">
+                                <p>Na minha empresa, quando ofereceram plano de carreira, diminuiu bastante o turnover.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="p-4 bg-gray-100 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600 flex gap-3 items-center flex-shrink-0">
+                    <input type="text" id="input-enviar-mensagem" placeholder="Digite sua mensagem aqui..." class="flex-1 px-4 py-3 border rounded-lg bg-white dark:bg-gray-800 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    <button id="btn-enviar-mensagem" class="font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-800 transition-colors px-3">
+                        Enviar
+                    </button>
+                </div>
+
+            </div>
+        </main>
+
+    </div>
 
     <div id="modal-criar-topico" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-bg hidden">
         <div class="bg-white dark:bg-gray-800 w-full max-w-lg p-6 rounded-lg shadow-xl">
@@ -137,18 +174,18 @@
         </div>
     </div>
 
-
     <script>
+        function logout() {
+            Swal.fire({title:'Saindo...', text:'Deseja realmente sair?', icon:'question', showCancelButton:true, confirmButtonText:'Sim', cancelButtonText:'Não'}).then(r => {
+                if(r.isConfirmed){
+                    localStorage.clear();
+                    window.location.href = "index.html";
+                }
+            });
+        }
+    
         document.addEventListener('DOMContentLoaded', () => {
-            
-            
-            const backLink = document.getElementById('back-to-dashboard-link');
-            if (backLink) {
-                const userRole = localStorage.getItem('userRole');
-                backLink.href = (userRole === 'Empresa') ? "Empresa.html" : "painel.html";
-            }
 
-            
             const STORAGE_KEY = 'forumPostsHTML';
             const chatArea = document.getElementById('chat-area');
             const btnCriarTopico = document.getElementById('btn-criar-topico');
@@ -159,38 +196,32 @@
             const inputEnviar = document.getElementById('input-enviar-mensagem');
             const inputBuscar = document.getElementById('input-buscar');
 
-            
             function loadPosts() {
                 const savedPosts = localStorage.getItem(STORAGE_KEY);
                 if (savedPosts) {
                     chatArea.innerHTML += savedPosts;
                 }
+                chatArea.scrollTop = chatArea.scrollHeight;
             }
 
-            
             function savePost(newPostHTML) {
                 const currentPosts = localStorage.getItem(STORAGE_KEY) || '';
                 localStorage.setItem(STORAGE_KEY, currentPosts + newPostHTML);
             }
             
-            
             function updateSavedPosts() {
-                
                 const userPosts = document.querySelectorAll('.forum-post.user-post');
                 
                 let newHtmlStorage = '';
                 userPosts.forEach(post => {
-                    newHtmlStorage += post.outerHTML; 
+                    newHtmlStorage += post.outerHTML;
                 });
-                
                 
                 localStorage.setItem(STORAGE_KEY, newHtmlStorage);
             }
 
-            
             loadPosts();
 
-            
             btnCriarTopico.addEventListener('click', () => {
                 modal.classList.remove('hidden');
             });
@@ -211,7 +242,6 @@
                 const userName = localStorage.getItem('currentUser') || 'Você';
                 const userInitial = userName.charAt(0).toUpperCase();
 
-                
                 const newPostHTML = `
                 <div class="flex items-start gap-3 forum-post user-post">
                     <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white font-bold">
@@ -242,7 +272,6 @@
                 chatArea.scrollTop = chatArea.scrollHeight;
             });
 
-            
             function enviarResposta() {
                 const mensagem = inputEnviar.value;
                 if (mensagem.trim() === '') return;
@@ -250,7 +279,6 @@
                 const userName = localStorage.getItem('currentUser') || 'Você';
                 const userInitial = userName.charAt(0).toUpperCase();
 
-                
                 const newReplyHTML = `
                 <div class="flex items-start gap-3 forum-post user-post">
                     <div class="flex-shrink-0 w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold">
@@ -284,7 +312,6 @@
                 }
             });
 
-            
             inputBuscar.addEventListener('keyup', () => {
                 const termo = inputBuscar.value.toLowerCase();
                 const posts = document.querySelectorAll('.forum-post'); 
@@ -299,21 +326,13 @@
                 });
             });
 
-            
             chatArea.addEventListener('click', function(e) {
-                
                 if (e.target.classList.contains('btn-excluir')) {
-                    
-                    
                     if (confirm('Tem certeza que deseja excluir esta postagem?')) {
-                        
                         const postToDelete = e.target.closest('.forum-post');
                         
                         if (postToDelete) {
-                            
                             postToDelete.remove();
-                            
-                            
                             updateSavedPosts();
                         }
                     }
