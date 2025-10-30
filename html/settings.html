@@ -52,15 +52,15 @@
     <div class="main-content">
         <header class="mb-8">
             <h2 class="text-3xl font-bold">Configurações</h2>
-            <p class="text-gray-500">Gerencie suas preferências e informações.</p>
+            <p class="text-gray-500 dark:text-gray-400">Gerencie suas preferências e informações.</p>
         </header>
 
         <div class="card">
             <h4 class="text-xl font-semibold mb-4">Perfil</h4>
             <div class="space-y-4">
                 <div>
-                    <label for="username" class="block text-sm font-medium">Nome de Usuário</label>
-                    <input type="text" id="username" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-purple-500 focus:border-purple-500">
+                    <label for="username" class="block text-sm font-medium dark:text-gray-300">Nome de Usuário</label>
+                    <input type="text" id="username" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:border-gray-600">
                 </div>
                 <button id="save-username" class="px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700">Salvar Nome</button>
             </div>
@@ -71,7 +71,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="font-medium">Tema Escuro (Dark Mode)</p>
-                    <p class="text-sm text-gray-500">Reduz o cansaço visual em ambientes com pouca luz.</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Reduz o cansaço visual em ambientes com pouca luz.</p>
                 </div>
                 <label class="toggle-switch">
                     <input type="checkbox" id="dark-mode-toggle">
@@ -84,48 +84,18 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="font-medium">Resetar Progresso</p>
-                    <p class="text-sm text-gray-500">Isso irá remover sua inscrição de todos os cursos. Esta ação não pode ser desfeita.</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Isso irá remover sua inscrição de todos os cursos e posts do fórum.</p>
                 </div>
                 <button id="reset-progress" class="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700">Resetar Agora</button>
             </div>
         </div>
         
-        <a id="back-to-dashboard-link" class="bg-white text-purple-700 font-bold py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors duration-300">
-        <i class="fas fa-arrow-left mr-2"></i>Voltar ao Painel
-    </a>
+        <a id="back-to-dashboard-link" class="text-purple-600 dark:text-purple-400 font-bold py-2 px-4 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300 inline-flex items-center">
+            <i class="fas fa-arrow-left mr-2"></i>Voltar ao Painel
+        </a>
     </div>
-    <script src="../JS/settings.js"></script>
-    <script>    
-document.addEventListener('DOMContentLoaded', () => {
-    const backLink = document.getElementById('back-to-dashboard-link');
-
-    if (backLink) {
-        
-        const params = new URLSearchParams(window.location.search);
-        const cameFrom = params.get('from');
-
-        
-        const userRole = localStorage.getItem('userRole');
-
-        
-        if (cameFrom === 'forum') {
-            backLink.href = "forum.html";
-            backLink.innerHTML = '<i class="fas fa-arrow-left mr-2"></i>Voltar ao Fórum'; // Muda o texto
-        } else if (userRole === 'Empresa') {
-            backLink.href = "Empresa.html";
-            
-        } else {
-            
-            backLink.href = "painel.html";
-        }
-    }
-
     
-    const usernameDisplay = document.querySelector('.username-display');
-    if (usernameDisplay) {
-        usernameDisplay.textContent = localStorage.getItem('currentUser') || 'Usuário';
-    }
-});
-</script>
+    <script src="../JS/settings.js"></script>
+    
 </body>
 </html>
