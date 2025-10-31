@@ -1,13 +1,35 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- ELEMENTOS DO DOM ---
+    // --- [NOVO] LÓGICA DO BOTÃO VOLTAR ---
+    const backLink = document.getElementById('back-to-dashboard-link');
+    if (backLink) {
+        const params = new URLSearchParams(window.location.search);
+        const cameFrom = params.get('from');
+        const userRole = localStorage.getItem('userRole');
+
+        if (cameFrom === 'forum') {
+            backLink.href = "forum.html";
+            backLink.innerHTML = '<i class="fas fa-arrow-left mr-2"></i>Voltar ao Fórum';
+        } else if (cameFrom === 'empresa' || userRole === 'Empresa') {
+            // Se veio da empresa OU é a empresa (fallback)
+            backLink.href = "Empresa.html";
+            backLink.innerHTML = '<i class="fas fa-arrow-left mr-2"></i>Voltar ao Painel';
+        } else {
+            // Padrão para colaborador
+            backLink.href = "painel.html";
+            backLink.innerHTML = '<i class="fas fa-arrow-left mr-2"></i>Voltar ao Painel';
+        }
+    }
+    // --- FIM DA LÓGICA DO BOTÃO VOLTAR ---
+
+    
     const usernameInput = document.getElementById('username');
     const saveUsernameBtn = document.getElementById('save-username');
     const darkModeToggle = document.getElementById('dark-mode-toggle');
     const resetProgressBtn = document.getElementById('reset-progress');
     const htmlElement = document.documentElement;
 
-    // --- FUNÇÃO PARA CARREGAR CONFIGURAÇÕES SALVAS ---
+    
     function loadSettings() {
         const savedUsername = localStorage.getItem('currentUser');
         if (savedUsername) {
@@ -22,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- SALVAR NOME DE USUÁRIO ---
+    
     saveUsernameBtn.addEventListener('click', () => {
         const newUsername = usernameInput.value.trim();
         if (newUsername) {
@@ -43,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- LÓGICA DO DARK MODE ---
+    
     darkModeToggle.addEventListener('change', () => {
         if (darkModeToggle.checked) {
             htmlElement.classList.add('dark');
@@ -54,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- LÓGICA PARA RESETAR PROGRESSO ---
+    
     resetProgressBtn.addEventListener('click', () => {
         Swal.fire({
             title: 'Você tem certeza?',
@@ -67,9 +89,10 @@ document.addEventListener('DOMContentLoaded', () => {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                // --- INÍCIO DA MODIFICAÇÃO: Correção da chave ---
-                localStorage.removeItem('cursosInscritos'); // <-- AJUSTE ESSENCIAL
-                // --- FIM DA MODIFICAÇÃO ---
+                
+                localStorage.removeItem('cursosInscritos');
+                localStorage.removeItem('forumPostsHTML');
+                
 
                 Swal.fire(
                     'Resetado!',

@@ -37,20 +37,20 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // 1. Pega o ID do curso da URL
+      
       const params = new URLSearchParams(window.location.search);
-      const cursoId = parseInt(params.get('cursoId')); // Converte para número
+      const cursoId = parseInt(params.get('cursoId'));
 
-      // 2. Encontra o curso na nossa base de dados
+      
       const curso = baseDeDados.cursos.find(c => c.id === cursoId);
 
       if (curso) {
-        // 3. Atualiza o título da página
+        
         document.getElementById('titulo-curso').textContent = `Gerenciando: ${curso.nome}`;
         
-        // 4. Mostra os alunos inscritos
+        
         const containerAlunos = document.getElementById('lista-alunos-container');
-        containerAlunos.innerHTML = ''; // Limpa o container
+        containerAlunos.innerHTML = ''; 
 
         if (curso.inscritos.length > 0) {
             curso.inscritos.forEach(aluno => {
@@ -74,7 +74,7 @@
       }
     });
     
-    // Função de exemplo para gerar um relatório CSV simples
+    
     function gerarRelatorioCurso() {
         const params = new URLSearchParams(window.location.search);
         const cursoId = parseInt(params.get('cursoId'));
@@ -83,7 +83,7 @@
         if (!curso) { alert("Curso não encontrado!"); return; }
 
         let csvContent = "data:text/csv;charset=utf-8,";
-        csvContent += "Aluno,Progresso\n"; // Cabeçalho do CSV
+        csvContent += "Aluno,Progresso\n"; 
 
         curso.inscritos.forEach(aluno => {
             csvContent += `${aluno.nome},${aluno.progresso}%\n`;

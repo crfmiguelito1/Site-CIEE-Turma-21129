@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="logofoguete.ico">
+    <link rel="icon" type="image/png" href="../imagens/imagem3.png">
+    <link rel="apple-touch-icon" href="../imagens/imagem3.png">
+    
     <title>Login - Aprimore</title>
     <style>
         body {
@@ -28,6 +30,10 @@
         .login-box h2 {
             margin-bottom: 20px;
             color: #6A1B9A;
+            /* MODIFICADO: Adicionado display flex para alinhar logo e texto */
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         input {
             width: 100%;
@@ -66,7 +72,10 @@
 </head>
 <body>
     <div class="login-box">
-        <h2>Aprimore</h2>
+        <h2>
+            <img src="../imagens/imagem3.png" alt="Logo Aprimore" style="width: 40px; height: 40px; margin-right: 10px;">
+            <span>Aprimore</span>
+        </h2>
         <form onsubmit="login(event)">
             <input type="text" id="usuario" placeholder="Usuário" required>
             <input type="password" id="senha" placeholder="Senha" required>
@@ -86,9 +95,9 @@
                 localStorage.setItem('currentUser', 'CIEE'); // Salva o nome do usuário
                 localStorage.setItem('userRole', 'Empresa'); // Salva o cargo
                 window.location.href = "Empresa.html";
-            } else if (usuario === "cadu" && senha === "vipal") {
-                localStorage.setItem('currentUser', 'Cadu'); // Salva o nome do usuário
-                localStorage.setItem('userRole', 'aluno'); // Salva o cargo
+            } else if (usuario === "colaborador" && senha === "ciee") {
+                localStorage.setItem('currentUser', 'Colaborador'); // Salva o nome do usuário
+                localStorage.setItem('userRole', 'Colaborador'); // Salva o cargo
                 window.location.href = "painel.html";
             } else {
                 alert("Usuário ou senha incorretos!");

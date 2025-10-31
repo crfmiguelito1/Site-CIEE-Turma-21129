@@ -4,9 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Aprimore - Painel de Controle</title>
-    <link rel="icon" href="../imagens/imagem 3.png" type="image/png">
-    <link rel="icon" href="../imagens/imagem 3.png" type="image/png" sizes="32x32">
-    <link rel="apple-touch-icon" href="../imagens/imagem 3.png" sizes="180x180">
+    <link rel="icon" href="../imagens/imagem3.png" type="image/png" sizes="96x96">
+    <link rel="apple-touch-icon" href="../imagens/imagem3.png" sizes="360x360">
     <meta name="theme-color" content="#ffffff">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -23,7 +22,14 @@
         *{box-sizing:border-box}
         body{ font-family:'Montserrat',sans-serif; margin:0; background:var(--cor-fundo); color:var(--cor-texto-principal); display:flex; min-height:100vh; }
         .sidebar{ width:250px; background:var(--cor-roxa-principal); color:var(--cor-branca); padding:20px; height:100vh; position:sticky; top:0; display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid #5a1682; }
-        .sidebar h1{font-size:1.6rem;text-align:center;margin:0 0 24px}
+        .sidebar h1{
+            font-size:1.6rem;
+            text-align:center;
+            margin:0 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         .sidebar nav ul{list-style:none;padding:0;margin:0}
         .sidebar nav li a{ display:flex; align-items:center; gap:12px; color:var(--cor-branca); text-decoration:none; padding:12px 16px; border-radius:8px; margin-bottom:8px; font-weight:600; transition:background .2s; }
         .sidebar nav li a:hover, .sidebar nav li a.ativo{background:rgba(255,255,255,0.12)}
@@ -70,7 +76,10 @@
 <body>
     <aside class="sidebar">
         <div>
-            <h1>Aprimore</h1>
+            <h1>
+                <img src="../imagens/imagem3.png" alt="Logo Aprimore" style="width: 60px; height: 60px; margin-right: 10px;">
+                <span>Aprimore</span>
+            </h1>
             <nav>
                 <ul>
                     <li><a href="#dashboard" class="menu-link ativo"><i class="fa-solid fa-house"></i> Dashboard</a></li>
@@ -78,7 +87,7 @@
                     <li><a href="#progresso" class="menu-link"><i class="fa-solid fa-chart-line"></i> Progresso</a></li>
                     <li><a href="#quemsomos" class="menu-link"><i class="fa-solid fa-info-circle"></i> Quem Somos</a></li>
                     <li><a href="forum.html"><i class="fa-solid fa-comments"></i> Fórum</a></li>
-                    <li><a href="settings.html"><i class="fa-solid fa-gear"></i> Configurações</a></li>
+                    <li><a href="settings.html?from=painel"><i class="fa-solid fa-gear"></i> Configurações</a></li>
                 </ul>
             </nav>
         </div>
@@ -119,7 +128,7 @@
             <div class="curso-item" data-course-name="Adaptação à Tecnologia"><i class="fa-solid fa-computer"></i><span><strong>Adaptação à Tecnologia</strong> – Nível: Avançado – 20h</span><button class="btn-laranja" onclick="handleCourseAction('Adaptação à Tecnologia', this)">Inscrever-se</button></div>
             <div class="curso-item" data-course-name="Produtividade"><i class="fa-solid fa-bolt"></i><span><strong>Produtividade</strong> – Nível: Intermediário – 12h</span><button class="btn-laranja" onclick="handleCourseAction('Produtividade', this)">Inscrever-se</button></div>
             <div class="curso-item" data-course-name="Aprendizado Contínuo"><i class="fa-solid fa-book-open"></i><span><strong>Aprendizado Contínuo</strong> – Nível: Iniciante – 8h</span><button class="btn-laranja" onclick="handleCourseAction('Aprendizado Contínuo', this)">Inscrever-se</button></div>
-            <div class="curso-item" data-course-name="Reduzir Rotatividade"><i class="fa-solid fa-users"></i><span><strong>Reduzir Rotatividade</strong> – Nível: Intermediário – 10h</span><button class="btn-laranja" onclick="handleCourseAction('Reduzir Rotatividade', this)">Inscrever-se</button></div>
+            
 
         </section>
 
