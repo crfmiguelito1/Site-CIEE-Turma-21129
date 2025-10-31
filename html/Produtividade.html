@@ -19,7 +19,7 @@
         .active-tab { color: #6A1B9A; border-bottom-color: #6A1B9A; }
         .prose-styling p { font-size: 1.1rem; line-height: 1.8; color: #374151; }
 
-        /* ESTILOS DE BOTÕES E DISABLED (Modo Claro) */
+        
         button:disabled {
             background-color: #9ca3af;
             cursor: not-allowed;
@@ -30,7 +30,7 @@
             transform: none;
         }
 
-        /* ESTILOS DO QUIZ (Modo Claro) */
+        
         .option-btn {
             transition: all 0.2s ease;
             border: 2px solid #e5e7eb;
@@ -51,7 +51,7 @@
         .correct { border: 2px solid #10b981 !important; background-color: #d1fae5 !important; color: #065f46 !important; }
         .incorrect { border: 2px solid #ef4444 !important; background-color: #fee2e2 !important; color: #991b1b !important; }
         
-        /* ANIMAÇÃO DE TRANSIÇÃO (FADE) */
+        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -60,7 +60,7 @@
             animation: fadeIn 0.4s ease-out;
         }
 
-        /* Dark Mode Styles */
+        
         .dark body { background-color: #111827; color: #d1d5db; }
         .dark .card, .dark .course-card { background-color: #1f2937; border: 1px solid #374151; }
         .dark h1, .dark h2, .dark h3, .dark h4, .dark p, .dark span, .dark h6 { color: #f9fafb; }
@@ -71,7 +71,7 @@
         .dark .border-gray-200 { border-color: #374151; }
         .dark .bg-white { background-color: #1f2937; }
         
-        /* Dark Mode Quiz Overrides */
+        
         .dark .option-btn { background-color: #374151; color: #f9fafb; border-color: #4b5563; }
         .dark .option-btn:hover:not(.disabled) { background-color: #4b5563; }
         .dark .correct { border: 2px solid #34d399 !important; background-color: #065f46 !important; color: #d1fae5 !important; }
@@ -80,12 +80,12 @@
         .dark .bg-yellow-100 { background-color: #374151; }
         .dark .text-yellow-800 { color: #facc15; }
 
-        /* ✅ CORREÇÃO DEFINITIVA PARA O TEXTO DA PERGUNTA DO QUIZ */
+        
         #quiz-container h4 {
-            color: #1f2937; /* Cor escura para o modo claro */
+            color: #1f2937; 
         }
         .dark #quiz-container h4 {
-            color: #f9fafb; /* Cor clara para o modo escuro */
+            color: #f9fafb; 
         }
     </style>
     <script>
@@ -204,7 +204,7 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // --- ELEMENTOS DO DOM ---
+        
         const trainingSection = document.getElementById('training-section');
         const quizSection = document.getElementById('quiz-section');
         const resultsSection = document.getElementById('results-section');
@@ -221,7 +221,7 @@
         const progressBarWellness = document.getElementById('progressBarWellness');
         const nextToWellnessBtn = document.getElementById('next-to-wellness-btn');
 
-        // --- DADOS DO QUIZ ---
+        
         const quizQuestions = [
             { 
                 question: "1. De acordo com o material, qual é a principal definição de ser produtivo?", 
@@ -273,14 +273,14 @@
             }
         ];
         
-        // --- VARIÁVEIS DE CONTROLE ---
+        
         let isQuizUnlocked = false;
         let currentQuestionIndex = 0;
         let userAnswers = new Array(quizQuestions.length).fill(null);
         let score = 0;
         const totalQuestions = quizQuestions.length;
 
-        // --- FUNÇÕES DO QUIZ ---
+        
 
         function calculateScore() {
             score = userAnswers.filter((answer, index) => answer === quizQuestions[index].correct).length;
@@ -400,7 +400,7 @@
             window.scrollTo(0, resultsSection.offsetTop);
         }
 
-        // --- FUNÇÕES DE NAVEGAÇÃO / PROGRESO (Originais mantidas) ---
+        
 
         function switchTab(clickedTabId) {
             tabButtons.forEach(button => button.classList.remove('active-tab'));
@@ -438,7 +438,7 @@
             }
         }
 
-        // --- EVENT LISTENERS ---
+        
 
         tabButtons.forEach(button => button.addEventListener('click', () => switchTab(button.id)));
         nextToWellnessBtn.addEventListener('click', () => switchTab('wellness-tab'));

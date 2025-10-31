@@ -1,6 +1,6 @@
-// Arquivo: dados.js
 
-// Nossa base de dados simulada.
+
+
 const baseDeDados = {
   cursos: [
     {
@@ -37,7 +37,7 @@ const baseDeDados = {
         { nome: "Beatriz Almeida", progresso: 55 },
       ],
     },
-     {
+    {
       id: 4,
       nome: "Aprendizado Contínuo",
       nivel: "Avançado",
@@ -48,7 +48,7 @@ const baseDeDados = {
         { nome: "Beatriz Almeida", progresso: 55 },
       ],
     },
-     {
+    {
       id: 5,
       nome: "Evitar Falhas",
       nivel: "Avançado",
@@ -59,7 +59,7 @@ const baseDeDados = {
         { nome: "Beatriz Almeida", progresso: 55 },
       ],
     },
-     {
+    {
       id: 6,
       nome: "Produtividade",
       nivel: "Avançado",
@@ -70,7 +70,7 @@ const baseDeDados = {
         { nome: "Beatriz Almeida", progresso: 55 },
       ],
     },
-     {
+    {
       id: 7,
       nome: "Reduzir Rotatividade",
       nivel: "Avançado",
@@ -81,6 +81,6 @@ const baseDeDados = {
         { nome: "Beatriz Almeida", progresso: 55 },
       ],
     }
-    // Adicione os outros cursos aqui no mesmo formato...
+    
   ],
 };

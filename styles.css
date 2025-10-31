@@ -1,6 +1,4 @@
-/* =================================
-   1. GERAL E VARIÁVEIS DE TEMA
-   ================================= */
+
 :root {
   --purple: #6A1B9A;
   --purple-dark: #4A148C;
@@ -27,9 +25,7 @@
   --focus-ring-color: hsl(27, 100%, 60%);
 }
 
-/* =================================
-   2. MODO ESCURO
-   ================================= */
+
 body.dark {
   --text-primary: #e2e8f0;
   --text-secondary: #94a3b8;
@@ -39,9 +35,7 @@ body.dark {
   --shadow-md: 0 6px 18px rgba(0,0,0,0.2);
 }
 
-/* =================================
-   3. ESTILOS BASE
-   ================================= */
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -61,9 +55,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* =================================
-   4. LAYOUT PRINCIPAL E CARDS
-   ================================= */
+
 .main {
   flex: 1;
   padding: 24px;
@@ -97,9 +89,7 @@ body {
   margin-bottom: 16px;
 }
 
-/* =================================
-   5. BOTÕES
-   ================================= */
+
 .btn {
   background: var(--orange);
   color: var(--white);
@@ -127,9 +117,7 @@ body {
   box-shadow: 0 0 0 3px var(--background-light), 0 0 0 5px var(--focus-ring-color);
 }
 
-/* =================================
-   6. FORMULÁRIOS
-   ================================= */
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -160,9 +148,7 @@ body {
   box-shadow: 0 0 0 3px var(--background-light), 0 0 0 5px var(--focus-ring-color);
 }
 
-/* =================================
-   7. RESPONSIVIDADE
-   ================================= */
+
 @media (max-width: 768px) {
   body {
     font-size: 15px;
@@ -179,9 +165,7 @@ body {
   }
 }
 
-/* =================================
-   8. LOGO APRIMORE + FOGUETE
-   ================================= */
+
 .logo {
   display: flex;
   align-items: center;
@@ -204,9 +188,7 @@ body {
   transform: translateY(-4px) scale(1.05);
 }
 
-/* =================================
-   9. FOGUETE FLUTUANTE (ANIMAÇÃO)
-   ================================= */
+
 .foguete-flutuante {
   position: fixed;
   bottom: 20px;

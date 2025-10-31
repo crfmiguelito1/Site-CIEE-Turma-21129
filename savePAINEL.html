@@ -218,18 +218,18 @@
 
     const inscritos = [];
 
-    // MODIFICADO: Função 'inscrever' foi substituída pela nova função 'handleCourseAction'
+    
     function handleCourseAction(nomeDoCurso, botao) {
-      // Caso 1: Se o usuário NÃO está inscrito, realiza a inscrição
+      
       if (!inscritos.includes(nomeDoCurso)) {
         inscritos.push(nomeDoCurso);
         atualizarMeusCursos();
         atualizaProgresso();
         
-        // Muda o texto do próprio botão para "Acessar"
+        
         botao.textContent = 'Acessar';
 
-        // Mostra o alerta de sucesso (usando SweetAlert)
+        
         Swal.fire({
             icon: 'success',
             title: 'Inscrição confirmada!',
@@ -241,7 +241,7 @@
             timerProgressBar: true
         });
       } 
-      // Caso 2: Se o usuário JÁ ESTÁ inscrito, a função do botão é levar para a página do curso
+      
       else {
         window.location.href = 'TreinamentoCompleto.html';
       }
@@ -258,7 +258,7 @@
       });
     }
 
-    // O restante do seu JavaScript (gráficos, logout, etc.) permanece exatamente o mesmo
+    
     const ctxP = document.getElementById('progressChart').getContext('2d');
     const progressChart = new Chart(ctxP, { type:'doughnut', data:{ datasets:[{data:[65,35],backgroundColor:[getComputedStyle(document.documentElement).getPropertyValue('--cor-laranja-destaque').trim() || '#F57C00','#E1BEE7'],borderWidth:0}] }, options:{cutout:'72%',plugins:{legend:{display:false}},animation:{animateScale:true,animateRotate:true}} });
     const ctxL = document.getElementById('lineChart').getContext('2d');

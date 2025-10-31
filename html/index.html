@@ -30,7 +30,7 @@
         .login-box h2 {
             margin-bottom: 20px;
             color: #6A1B9A;
-            /* MODIFICADO: Adicionado display flex para alinhar logo e texto */
+            
             display: flex;
             align-items: center;
             justify-content: center;
@@ -41,8 +41,8 @@
             margin: 10px 0;
             border-radius: 8px;
             border: 1px solid #ccc;
-            box-sizing: border-box; /* Adicionado para melhor controle do tamanho */
-            text-align: center; /* NOVO: Centraliza o texto dentro dos inputs */
+            box-sizing: border-box; 
+            text-align: center; 
         }
         button {
             background: #6A1B9A;
@@ -58,7 +58,7 @@
         button:hover {
             background: #F57C00;
         }
-        /* Estilos para o Dark Mode */
+        
         .dark body { background-color: #111827; color: #d1d5db; }
         .dark .login-box { background-color: #1f2937; border: 1px solid #374151; }
         .dark .login-box h2 { color: #f9fafb; }
@@ -89,15 +89,14 @@
             const usuario = document.getElementById("usuario").value.toLowerCase();
             const senha = document.getElementById("senha").value;
             
-            // Simulação de login
-            // Salva o nome de usuário e o cargo para usar em outras páginas
+            
             if (usuario === "naiana" && senha === "ciee") {
-                localStorage.setItem('currentUser', 'CIEE'); // Salva o nome do usuário
-                localStorage.setItem('userRole', 'Empresa'); // Salva o cargo
+                localStorage.setItem('currentUser', 'CIEE'); 
+                localStorage.setItem('userRole', 'Empresa'); 
                 window.location.href = "Empresa.html";
             } else if (usuario === "colaborador" && senha === "ciee") {
-                localStorage.setItem('currentUser', 'Colaborador'); // Salva o nome do usuário
-                localStorage.setItem('userRole', 'Colaborador'); // Salva o cargo
+                localStorage.setItem('currentUser', 'Colaborador'); 
+                localStorage.setItem('userRole', 'Colaborador'); 
                 window.location.href = "painel.html";
             } else {
                 alert("Usuário ou senha incorretos!");

@@ -29,7 +29,7 @@
             transform: none;
         }
 
-        /* Dark Mode Styles */
+        
         .dark body { background-color: #111827; color: #d1d5db; }
         .dark .card, .dark .course-card { background-color: #1f2937; border: 1px solid #374151; }
         .dark h1, .dark h2, .dark h3, .dark h4, .dark p, .dark span, .dark h6 { color: #f9fafb; }
@@ -151,32 +151,32 @@ da organização.</p>
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // --- ELEMENTOS DO DOM ---
+        
         const trainingSection = document.getElementById('training-section');
         const quizSection = document.getElementById('quiz-section');
         const startQuizBtn = document.getElementById('start-quiz-btn');
         const quizUnlockMessage = document.getElementById('quiz-unlock-message');
 
-        // Abas e Painéis
+        
         const tabButtons = document.querySelectorAll('.tab-button');
         const readingTab = document.getElementById('reading-tab');
         const wellnessTab = document.getElementById('wellness-tab');
         const readingPanel = document.getElementById('reading-panel');
         const wellnessPanel = document.getElementById('wellness-panel');
         
-        // Barras de Progresso
+        
         const progressBarReading = document.getElementById('progressBarReading');
         const progressBarWellness = document.getElementById('progressBarWellness');
 
-        // Botões de Navegação
+        
         const nextToWellnessBtn = document.getElementById('next-to-wellness-btn');
 
-        // Variáveis de controle
+        
         let isQuizUnlocked = false;
 
-        // --- FUNÇÕES ---
+        
 
-        // Função para trocar de aba
+        
         function switchTab(clickedTabId) {
             tabButtons.forEach(button => button.classList.remove('active-tab'));
             
@@ -189,10 +189,10 @@ da organização.</p>
                 wellnessPanel.classList.add('hidden');
                 readingPanel.classList.remove('hidden');
             }
-            window.scrollTo(0, 0); // Rola para o topo ao trocar de aba
+            window.scrollTo(0, 0); 
         }
 
-        // Função genérica para atualizar o progresso da aba ativa
+        
         function updateActiveTabProgress() {
             const scrollTop = window.scrollY;
             const windowHeight = window.innerHeight;
@@ -201,14 +201,14 @@ da organização.</p>
             const currentScrollPercent = totalScrollable > 0 ? (scrollTop / totalScrollable) * 100 : 100;
             const progressToShow = Math.min(currentScrollPercent, 100);
 
-            // Verifica qual painel está visível e atualiza a barra correspondente
+            
             if (!readingPanel.classList.contains('hidden')) {
                 progressBarReading.style.width = progressToShow + '%';
             } 
             else if (!wellnessPanel.classList.contains('hidden') && !isQuizUnlocked) {
                 progressBarWellness.style.width = progressToShow + '%';
                 
-                // Condição de desbloqueio: atingiu 95% da rolagem na aba de bem-estar
+                
                 if (progressToShow >= 95) {
                     isQuizUnlocked = true;
                     
@@ -220,28 +220,28 @@ da organização.</p>
             }
         }
 
-        // --- EVENT LISTENERS ---
+        
 
-        // Listener para os botões das abas
+        
         tabButtons.forEach(button => {
             button.addEventListener('click', () => switchTab(button.id));
         });
         
-        // Listener para o botão "Avançar para Bem-Estar"
+        
         nextToWellnessBtn.addEventListener('click', () => {
             switchTab('wellness-tab');
         });
 
-        // Listener para o botão de iniciar o quiz
+        
         startQuizBtn.addEventListener('click', () => {
             if (isQuizUnlocked) {
                 trainingSection.classList.add('hidden');
                 quizSection.classList.remove('hidden');
-                // buildQuiz(); // Chame sua função de construir o quiz aqui
+                
             }
         });
 
-        // Otimizador de evento de scroll
+        
         function throttle(func, limit) {
             let inThrottle;
             return function(...args) {
@@ -254,7 +254,7 @@ da organização.</p>
         }
         window.addEventListener('scroll', throttle(updateActiveTabProgress, 100));
 
-        // Lógica do link de "Voltar" (baseado no localStorage)
+        
         const backLink = document.getElementById('back-to-dashboard-link');
         if (backLink) {
             const userRole = localStorage.getItem('userRole');
