@@ -40,6 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
             darkModeToggle.checked = true;
             htmlElement.classList.add('dark');
         } else {
+            // [CORREÇÃO] Esta linha estava faltando
+            darkModeToggle.checked = false; 
             htmlElement.classList.remove('dark');
         }
     }
