@@ -41,11 +41,11 @@
         input:checked + .slider { background-color: #6A1B9A; }
         input:checked + .slider:before { transform: translateX(26px); }
 
-        /* Cores de fundo claro/escuro */
+        /* [CORRIGIDO] Removidas as regras de 'color' do body. */
+        /* O Tailwind irá controlar as cores do texto via classes. */
         body { background-color: #F8F9FA; }
         .dark body { background-color: #111827; }
         
-        /* Cores dos cards */
         .dark .card { background-color: #1f2937; border: 1px solid #374151; }
     </style>
 </head>
@@ -54,7 +54,7 @@
     <div class="main-content">
         <header class="mb-8">
             <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Configurações</h2>
-            <p class="text-gray-500 dark:text-gray-400">Gerencie suas preferências e informações.</p>
+            <p class="text-gray-700 dark:text-gray-400">Gerencie suas preferências e informações.</p>
         </header>
 
         <div class="card">
@@ -73,7 +73,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="font-medium text-gray-900 dark:text-gray-100">Tema Escuro (Dark Mode)</p>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Reduz o cansaço visual em ambientes com pouca luz.</p>
+                    <p class="text-sm text-gray-700 dark:text-gray-400">Reduz o cansaço visual em ambientes com pouca luz.</p>
                 </div>
                 <label class="toggle-switch">
                     <input type="checkbox" id="dark-mode-toggle">
@@ -86,7 +86,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="font-medium text-gray-900 dark:text-gray-100">Resetar Progresso</p>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Isso irá remover sua inscrição de todos os cursos e posts do fórum.</p>
+                    <p class="text-sm text-gray-700 dark:text-gray-400">Isso irá remover sua inscrição de todos os cursos e posts do fórum.</p>
                 </div>
                 <button id="reset-progress" class="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700">Resetar Agora</button>
             </div>
