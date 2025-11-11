@@ -6,32 +6,45 @@
     <title>Configurações - Aprimore</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script>
+        window.tailwind = {
+            darkMode: 'class',
+        }
+    </script>
 
     <script>
-        // Este script (no <head>) aplica o tema ANTES da página carregar
         if (localStorage.getItem('theme') === 'dark') {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.remove('dark');
         }
     </script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         :root{
             --cor-roxa-principal:#6A1B9A;
             --cor-laranja-destaque:#F57C00;
         }
-        body{ font-family:'Montserrat',sans-serif; margin:0; min-height:100vh; }
+        /* O Tailwind vai cuidar das cores de fundo e texto, 
+           então só precisamos das regras estruturais. */
+        body{ 
+            font-family:'Montserrat',sans-serif; 
+            margin:0; 
+            min-height:100vh; 
+            /* Classes do Tailwind serão aplicadas no <body> */
+        }
         .main-content{flex:1;padding:28px}
         
         .card { 
-            background-color: white; 
             border-radius: 12px; 
             padding: 24px; 
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             margin-bottom: 24px;
+            /* Classes de cor e fundo serão aplicadas no <body> */
         }
 
         .toggle-switch { position: relative; display: inline-block; width: 60px; height: 34px; }
@@ -40,24 +53,18 @@
         .slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: #6A1B9A; }
         input:checked + .slider:before { transform: translateX(26px); }
-
-        /* [CORRIGIDO] Removidas as regras de 'color' do body. */
-        /* O Tailwind irá controlar as cores do texto via classes. */
-        body { background-color: #F8F9FA; }
-        .dark body { background-color: #111827; }
-        
-        .dark .card { background-color: #1f2937; border: 1px solid #374151; }
     </style>
 </head>
-<body>
+
+<body class="bg-gray-100 dark:bg-gray-900">
 
     <div class="main-content">
         <header class="mb-8">
             <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Configurações</h2>
-            <p class="text-gray-700 dark:text-gray-400">Gerencie suas preferências e informações.</p>
+            <p class="text-gray-600 dark:text-gray-400">Gerencie suas preferências e informações.</p>
         </header>
 
-        <div class="card">
+        <div class="card bg-white dark:bg-gray-800 dark:border dark:border-gray-700">
             <h4 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Perfil</h4>
             <div class="space-y-4">
                 <div>
@@ -68,12 +75,12 @@
             </div>
         </div>
 
-        <div class="card">
+        <div class="card bg-white dark:bg-gray-800 dark:border dark:border-gray-700">
             <h4 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Aparência</h4>
             <div class="flex items-center justify-between">
                 <div>
                     <p class="font-medium text-gray-900 dark:text-gray-100">Tema Escuro (Dark Mode)</p>
-                    <p class="text-sm text-gray-700 dark:text-gray-400">Reduz o cansaço visual em ambientes com pouca luz.</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Reduz o cansaço visual em ambientes com pouca luz.</p>
                 </div>
                 <label class="toggle-switch">
                     <input type="checkbox" id="dark-mode-toggle">
@@ -81,12 +88,13 @@
                 </label>
             </div>
         </div>
-        <div class="card border-red-500 border-2">
+
+        <div class="card border-red-500 border-2 bg-white dark:bg-gray-800">
             <h4 class="text-xl font-semibold mb-4 text-red-600">Zona de Perigo</h4>
             <div class="flex items-center justify-between">
                 <div>
                     <p class="font-medium text-gray-900 dark:text-gray-100">Resetar Progresso</p>
-                    <p class="text-sm text-gray-700 dark:text-gray-400">Isso irá remover sua inscrição de todos os cursos e posts do fórum.</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Isso irá remover sua inscrição de todos os cursos e posts do fórum.</p>
                 </div>
                 <button id="reset-progress" class="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700">Resetar Agora</button>
             </div>
@@ -122,7 +130,7 @@
             const saveUsernameBtn = document.getElementById('save-username');
             const darkModeToggle = document.getElementById('dark-mode-toggle');
             const resetProgressBtn = document.getElementById('reset-progress');
-            const htmlElement = document.documentElement;
+            const htmlElement = document.documentElement; // <-- Importante
 
             
             function loadSettings() {
@@ -132,12 +140,12 @@
                 }
                 const savedTheme = localStorage.getItem('theme');
                 
+                // Esta função SÓ precisa sincronizar o *botão* com o tema
+                // que o script do <head> já aplicou.
                 if (savedTheme === 'dark') {
                     darkModeToggle.checked = true;
-                    htmlElement.classList.add('dark');
                 } else {
                     darkModeToggle.checked = false; 
-                    htmlElement.classList.remove('dark');
                 }
             }
 
@@ -164,6 +172,7 @@
 
             
             darkModeToggle.addEventListener('change', () => {
+                // Esta é a ação do clique, que atualiza a classe E o localStorage
                 if (darkModeToggle.checked) {
                     htmlElement.classList.add('dark');
                     localStorage.setItem('theme', 'dark');
@@ -199,6 +208,7 @@
                 });
             });
 
+            // Carrega as configurações (sincroniza o botão)
             loadSettings();
         });
 

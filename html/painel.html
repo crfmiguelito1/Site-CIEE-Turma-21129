@@ -13,8 +13,16 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        if (localStorage.getItem('theme') === 'dark') { document.documentElement.classList.add('dark'); } 
-        else { document.documentElement.classList.remove('dark'); }
+        if (localStorage.getItem('theme') === 'dark') { 
+            document.documentElement.classList.add('dark'); 
+        } else { 
+            document.documentElement.classList.remove('dark'); 
+        }
+
+        // Esta é a nova linha crucial:
+        window.tailwind = {
+            darkMode: 'class',
+        }
     </script>
     <style>
         :root{ --cor-roxa-principal:#6A1B9A; --cor-roxa-clara:#E1BEE7; --cor-laranja-destaque:#F57C00; --cor-branca:#FFFFFF; --cor-texto-principal:#333; --cor-fundo:#F8F9FA; --sombra-padrao:0 4px 12px rgba(0,0,0,0.08); }
@@ -39,12 +47,18 @@
         .user-profile img{width:50px;height:50px;border-radius:50%;object-fit:cover;}
         .card{background:var(--cor-branca);padding:22px;border-radius:12px;box-shadow:var(--sombra-padrao)}
         .card h4{margin:0 0 16px;border-left:4px solid var(--cor-roxa-principal);padding-left:12px;font-size:1.1rem}
+        
+        /* Regras do Modo Claro (Padrão) */
         #dashboard h2 { font-size: 2rem; font-weight: 700; color: #333; }
         #dashboard .welcome-text { font-size: 1.1rem; color: #555; margin-bottom: 2rem;}
+        .stat-card .info strong { font-size: 1.8rem; display: block; color: var(--cor-texto-principal); } 
+        .stat-card .info span { font-size: 0.9rem; color: #666; }
+        .team-member strong { display: block; font-size: 1.2rem; color: var(--cor-texto-principal); } 
+        .team-member span { font-size: 0.9rem; color: #666; }
+        
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 2rem; }
         .stat-card { background: var(--cor-branca); padding: 20px; border-radius: 12px; box-shadow: var(--sombra-padrao); display: flex; align-items: center; gap: 15px; }
         .stat-card .icon { font-size: 2rem; color: var(--cor-roxa-principal); background-color: var(--cor-roxa-clara); width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; }
-        .stat-card .info strong { font-size: 1.8rem; display: block; } .stat-card .info span { font-size: 0.9rem; color: #666; }
         .curso-item{ display:flex;align-items:center;justify-content:space-between; background:#f9f9f9;margin:12px 0;padding:15px;border-radius:10px; border: 1px solid #eee; transition: box-shadow .2s, transform .2s; }
         .curso-item:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.09); }
         .curso-item i{font-size:1.5em;color:var(--cor-roxa-principal);margin-right:15px;} .curso-item span{flex:1;font-size:0.95em;}
@@ -60,13 +74,27 @@
         .team-member { text-align: center; padding: 20px; border-radius: 10px; background: var(--cor-branca); border: 1px solid #eee; transition: transform 0.2s, box-shadow 0.2s; }
         .team-member:hover { transform: translateY(-5px); box-shadow: var(--sombra-padrao); }
         .team-member img { width: 120px; height: 120px; border-radius: 50%; margin-bottom: 15px; border: 4px solid var(--cor-roxa-clara); }
-        .team-member strong { display: block; font-size: 1.2rem; color: var(--cor-texto-principal); } .team-member span { font-size: 0.9rem; color: #666; }
         .hidden { display: none; }
         .btn-logout { background: #dc3545; color: var(--cor-branca); text-align: center; padding: 12px 16px; border-radius: 8px; margin-top: 20px; cursor: pointer; font-weight: 600; text-decoration: none; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .btn-logout:hover { background: #c82333; }
+
+        /* --- MODO ESCURO --- */
         .dark body { --cor-fundo: #111827; --cor-texto-principal: #d1d5db; }
         .dark .card { background-color: #1f2937; border: 1px solid #374151; }
-        .dark h2, .dark .welcome-text, .dark .stat-card .info span, .dark h4, .dark p { color: #f9fafb; }
+        
+        /* --- CORREÇÃO MODO ESCURO --- */
+        .dark #dashboard h2, 
+        .dark #dashboard .welcome-text, 
+        .dark .stat-card .info span, 
+        .dark .stat-card .info strong,
+        .dark .card h4, 
+        .dark p,
+        .dark .team-member strong,
+        .dark .team-member span { 
+          color: #f9fafb; /* Cor branca/clara */
+        }
+        /* --- FIM DA CORREÇÃO --- */
+
         .dark .sidebar { background-color: #1f2937; border-right-color: #374151; }
         .dark .main-header { border-bottom-color: #374151; }
         .dark .stat-card, .dark .curso-item, .dark .inscrito-item { background: #374151; border-color: #4b5563; }
@@ -154,6 +182,8 @@
     </div>
 
     <script>
+        // O JavaScript permanece o mesmo, pois a lógica de funcionamento
+        // não mudou, apenas a renderização do CSS.
         const infoCursos = { "Capacitação": { icone: "fa-solid fa-graduation-cap", url: "Capacitação.html" }, "Padronização de Processos": { icone: "fa-solid fa-gear", url: "Padronização de Processos.html" }, "Adaptação à Tecnologia": { icone: "fa-solid fa-computer", url: "Adaptação à Tecnologia.html" }, "Produtividade": { icone: "fa-solid fa-bolt", url: "Produtividade.html" }, "Aprendizado Contínuo": { icone: "fa-solid fa-book-open", url: "Aprendizado Contínuo.html" }, "Reduzir Rotatividade": { icone: "fa-solid fa-users", url: "Reduzir Rotatividade.html" }, };
         let inscritos = [];
         const totalDeCursos = 7;

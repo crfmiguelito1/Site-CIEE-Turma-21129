@@ -19,6 +19,7 @@
         .active-tab { color: #6A1B9A; border-bottom-color: #6A1B9A; }
         .prose-styling p { font-size: 1.1rem; line-height: 1.8; color: #374151; }
 
+        
         button:disabled {
             background-color: #9ca3af;
             cursor: not-allowed;
@@ -27,6 +28,36 @@
         button:disabled:hover {
             background-color: #9ca3af;
             transform: none;
+        }
+
+        /* --- ESTILOS DO QUIZ (Faltando no seu arquivo) --- */
+        .option-btn {
+            transition: all 0.2s ease;
+            border: 2px solid #e5e7eb;
+            background-color: #f9fafb;
+            color: #374151;
+        }
+        .option-btn:hover:not(.disabled) { 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #f3f4f6;
+        }
+        .disabled {
+            pointer-events: none;
+            opacity: 0.8;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        .correct { border: 2px solid #10b981 !important; background-color: #d1fae5 !important; color: #065f46 !important; }
+        .incorrect { border: 2px solid #ef4444 !important; background-color: #fee2e2 !important; color: #991b1b !important; }
+        
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.4s ease-out;
         }
 
         
@@ -39,6 +70,23 @@
         .dark .active-tab { color: #a78bfa; border-bottom-color: #a78bfa; }
         .dark .border-gray-200 { border-color: #374151; }
         .dark .bg-white { background-color: #1f2937; }
+        
+        
+        .dark .option-btn { background-color: #374151; color: #f9fafb; border-color: #4b5563; }
+        .dark .option-btn:hover:not(.disabled) { background-color: #4b5563; }
+        .dark .correct { border: 2px solid #34d399 !important; background-color: #065f46 !important; color: #d1fae5 !important; }
+        .dark .incorrect { border: 2px solid #f87171 !important; background-color: #991b1b !important; color: #fee2e2 !important; }
+        
+        .dark .bg-yellow-100 { background-color: #374151; }
+        .dark .text-yellow-800 { color: #facc15; }
+
+        
+        #quiz-container h4 {
+            color: #1f2937; 
+        }
+        .dark #quiz-container h4 {
+            color: #f9fafb; 
+        }
     </style>
     <script>
         if (localStorage.getItem('theme') === 'dark') {
@@ -61,7 +109,7 @@
                 <button id="reading-tab" role="tab" class="tab-button active-tab">Capacitação</button>
                 <button id="wellness-tab" role="tab" class="tab-button">benefícios</button>
             </div>
-            
+
             <div class="course-card">
                 <div id="reading-panel" role="tabpanel">
                     <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
@@ -69,14 +117,13 @@
                     </div>
                     <h2 class="text-4xl font-bold text-gray-800 mb-6">Capacitação, o que é?</h2>
                     
-                    
-                        
-                     <p>É um processo de desenvolver habilidades e competências, beneficiando tanto o indivíduo quanto a empresa com aumento de produtividade, inovação, retenção de talentos e melhoria do desempenho.</P> 
-                        <p></p>
+                    <div class="prose-styling space-y-6">
+                        <p>É um processo de desenvolver habilidades e competências, beneficiando tanto o indivíduo quanto a empresa com aumento de produtividade, inovação, retenção de talentos e melhoria do desempenho.</P> 
                         <P>Para o profissional, significa mais empregabilidade, avanço na carreira e maior satisfação;</p>
-                            <p></p>
-                            <P>para a empresa, resulta em uma equipe mais qualificada, competitiva e engajada, além de redução de erros e custos a longo prazo.</P>
-                     <p class="text-1xl font-bold text-gray-800 mb-6">Você chegou ao final do conteúdo de leitura sobre Capacitação, vamos agora aos Benefícios!</p>
+                        <P>para a empresa, resulta em uma equipe mais qualificada, competitiva e engajada, além de redução de erros e custos a longo prazo.</P>
+                    </div>
+
+                    <div class="text-center mt-12 pt-8 border-t border-gray-200">
                         <button id="next-to-wellness-btn" class="w-full md:w-auto inline-flex items-center justify-center px-8 py-3 border border-transparent text-lg font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 transition-transform transform hover:scale-105">
                             Avançar para Benefícios <i class="fas fa-arrow-right ml-2"></i>
                         </button>
@@ -98,9 +145,9 @@
                         <p><strong>Preparação para liderança: </strong>Capacitações podem ser o caminho para posições de gestão e responsabilidade.</p>
                         <p><strong>Diferenciação no mercado: </strong>O profissional se destaca por ter conhecimentos atualizados e habilidades específicas.</p>
                         <p><strong>Expansão do networking: </strong>Oportunidades de capacitação promovem o contato com outros profissionais da área.</p>
-                       
+                        
                         <h3 class="text-2xl font-bold text-gray-800">Benefícios para a empresa</h3>
-                     
+                    
                         <p><strong>Aumento da produtividade: </strong> colaboradores mais capacitados executam tarefas com maior eficiência, resultando em melhor desempenho. </p>
                         <p><strong>Redução de erros e custos: </strong> Um time mais qualificado comete menos falhas, o que diminui custos e retrabalho. </p>
                         <p><strong>Retenção de talentos: </strong> investir no desenvolvimento dos colaboradores demonstra valorização, o que reduz a rotatividade.</p>
@@ -108,28 +155,42 @@
                         <p><strong>Equipe mais engajada e motivada: </strong>a capacitação melhora o engajamento e a motivação da equipe.</p>
                         <p><strong> Desenvolvimento de lideranças internas: </strong>a empresa pode formar novos líderes a partir de sua própria equipe.</p>
                         <p><strong>Fortalecimento da cultura organizacional:  </strong>um ambiente focado no aprendizado contínuo fortalece a cultura da empresa.</p>
- </div>
+                    </div>
+                    
                     <div class="text-center mt-12 pt-8 border-t border-gray-200">
-                        <img src="https://midias.agazeta.com.br/2021/04/09/aceitar-os-sintomas-do-transtorno-mental-sao-passos-iniciais-para-cuidar-da-mente-470494-article.jpg" alt="Imagem ilustrativa de produtividade" class="mx-auto my-4 rounded-lg shadow-md max-w-full md:max-w-2xl">
-                    <div class="text-center mt-12 pt-8 border-t border-gray-200">
-                        <div id="quiz-unlock-message" class="mb-4 p-4 bg-yellow-100 text-yellow-800 rounded-lg">
-                            <i class="fas fa-lock mr-2"></i>
-                            Role até o final para liberar o teste de conhecimento.
+                            <div id="quiz-unlock-message" class="mb-4 p-4 bg-yellow-100 text-yellow-800 rounded-lg">
+                                <i class="fas fa-lock mr-2"></i>
+                                Role até o final para liberar o teste de conhecimento.
+                            </div>
+                            <button id="start-quiz-btn" class="w-full md:w-auto inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-white transition-transform transform hover:scale-105" disabled>
+                                Teste Bloqueado
+                            </button>
                         </div>
-                        <button id="start-quiz-btn" class="w-full md:w-auto inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-white transition-transform transform hover:scale-105" disabled>
-                            Teste Bloqueado
-                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="quiz-section" class="hidden">
-            <h2 class="text-3xl font-bold">Quiz de Conhecimento</h2>
-            <p>Responda as perguntas abaixo.</p>
+        <div id="quiz-section" class="hidden course-card">
+            <h2 class="text-3xl font-bold text-purple-700 mb-6">Quiz de Conhecimento: Capacitação</h2>
+            <p class="mb-8 text-xl text-gray-600">Selecione a resposta correta em cada pergunta.</p>
+            
+            <div id="quiz-container" class="space-y-6">
+                </div>
+            
+            <div id="quiz-navigation" class="flex justify-between mt-6 pt-4 border-t border-gray-200">
+                </div>
         </div>
-        <div id="results-section" class="hidden">
-            </div>
+        
+        <div id="results-section" class="hidden course-card text-center">
+            <h2 class="text-3xl font-bold text-purple-700 mb-4">Seus Resultados do Quiz!</h2>
+            <div id="score-display" class="text-5xl font-extrabold text-green-600 mb-6"></div>
+            <p id="balance-message" class="text-xl text-gray-700 mb-8"></p>
+            <a id="finish-training-link" class="bg-purple-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-purple-700 transition-colors duration-300">
+                <i class="fas fa-check-circle mr-2"></i> Finalizar Treinamento
+            </a>
+            <button onclick="window.location.reload()" class="mt-4 px-6 py-3 rounded-md bg-orange-600 text-white hover:bg-orange-700 transition-colors">Refazer Treinamento</button>
+        </div>
     </main>
 
     <script>
@@ -137,64 +198,244 @@
         
         const trainingSection = document.getElementById('training-section');
         const quizSection = document.getElementById('quiz-section');
+        const resultsSection = document.getElementById('results-section');
+        const quizContainer = document.getElementById('quiz-container');
+        const quizNavigation = document.getElementById('quiz-navigation');
         const startQuizBtn = document.getElementById('start-quiz-btn');
         const quizUnlockMessage = document.getElementById('quiz-unlock-message');
 
-        
         const tabButtons = document.querySelectorAll('.tab-button');
-        const readingTab = document.getElementById('reading-tab');
-        const wellnessTab = document.getElementById('wellness-tab');
         const readingPanel = document.getElementById('reading-panel');
         const wellnessPanel = document.getElementById('wellness-panel');
         
-        
         const progressBarReading = document.getElementById('progressBarReading');
         const progressBarWellness = document.getElementById('progressBarWellness');
-
-        
         const nextToWellnessBtn = document.getElementById('next-to-wellness-btn');
 
         
-        let isQuizUnlocked = false;
-
-        
-
-        
-        function switchTab(clickedTabId) {
-            tabButtons.forEach(button => button.classList.remove('active-tab'));
-            
-            if (clickedTabId === 'wellness-tab') {
-                wellnessTab.classList.add('active-tab');
-                readingPanel.classList.add('hidden');
-                wellnessPanel.classList.remove('hidden');
-            } else {
-                readingTab.classList.add('active-tab');
-                wellnessPanel.classList.add('hidden');
-                readingPanel.classList.remove('hidden');
+        // --- PERGUNTAS DE CAPACITAÇÃO ---
+        const quizQuestions = [
+            { 
+                question: "1. O que significa “capacitação” dentro de uma empresa?", 
+                options: [
+                    "Ensinar apenas regras de comportamento.", 
+                    "Treinar funcionários para melhorar suas habilidades e desempenho.", 
+                    "Fazer avaliações de desempenho sem oferecer suporte.", 
+                    "Substituir funcionários antigos por novos."
+                ], 
+                correct: "Treinar funcionários para melhorar suas habilidades e desempenho.", 
+                explanation: "Correto! A capacitação foca no desenvolvimento de competências para melhorar a execução das tarefas e os resultados." 
+            },
+            { 
+                question: "2. Qual é o principal objetivo da capacitação profissional?", 
+                options: [
+                    "Aumentar a competitividade e o crescimento tanto do colaborador quanto da empresa.", 
+                    "Controlar o tempo de trabalho dos funcionários.", 
+                    "Reduzir custos operacionais apenas.", 
+                    "Cumprir uma exigência legal."
+                ], 
+                correct: "Aumentar a competitividade e o crescimento tanto do colaborador quanto da empresa.", 
+                explanation: "Exato! O desenvolvimento dos colaboradores impulsiona os resultados da empresa, beneficiando a todos." 
+            },
+            { 
+                question: "3. Um exemplo de capacitação é:", 
+                options: [
+                    "Reuniões para discutir fofocas do ambiente de trabalho.", 
+                    "Cursos, palestras e treinamentos que desenvolvem novas competências.", 
+                    "Pausas para café durante o expediente.", 
+                    "Mudanças na estrutura física da empresa."
+                ], 
+                correct: "Cursos, palestras e treinamentos que desenvolvem novas competências.", 
+                explanation: "Correto! Essas são atividades formais de aprendizado destinadas a ensinar ou melhorar habilidades." 
+            },
+            { 
+                question: "4. Quais são os benefícios da capacitação para o *colaborador*?", 
+                options: [
+                    "Apenas a garantia de estabilidade no emprego.", 
+                    "Aumento da motivação, valorização profissional e oportunidade de crescimento.", 
+                    "Mais pausas e menor carga de trabalho.", 
+                    "Recebimento de bônus sem necessidade de aplicar o conhecimento."
+                ], 
+                correct: "Aumento da motivação, valorização profissional e oportunidade de crescimento.", 
+                explanation: "Aprender novas habilidades torna o colaborador mais valioso, confiante e preparado para novas oportunidades." 
+            },
+            { 
+                question: "5. Quando a capacitação deve ocorrer em uma empresa?", 
+                options: [
+                    "Apenas quando um funcionário é recém-contratado.", 
+                    "Somente quando um funcionário comete um erro grave.", 
+                    "Continuamente, para atualizar conhecimentos e preparar para mudanças.", 
+                    "Apenas para os gerentes e diretores."
+                ], 
+                correct: "Continuamente, para atualizar conhecimentos e preparar para mudanças.", 
+                explanation: "O aprendizado contínuo é essencial para manter a empresa e os colaboradores atualizados e competitivos." 
             }
-            window.scrollTo(0, 0); 
+        ];
+        
+        
+        let isQuizUnlocked = false;
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(quizQuestions.length).fill(null);
+        let score = 0;
+        const totalQuestions = quizQuestions.length;
+
+        
+
+        function calculateScore() {
+            score = userAnswers.filter((answer, index) => answer === quizQuestions[index].correct).length;
+        }
+
+        function renderQuestion() {
+            if (currentQuestionIndex >= totalQuestions) {
+                showResults();
+                return;
+            }
+
+            quizContainer.innerHTML = '';
+            quizNavigation.innerHTML = '';
+            const q = quizQuestions[currentQuestionIndex];
+            const hasAnswered = userAnswers[currentQuestionIndex] !== null;
+
+            const questionElement = document.createElement('div');
+            questionElement.classList.add('fade-in');
+            
+            let optionsHTML = '';
+            q.options.forEach(option => {
+                let classes = "option-btn block w-full text-left px-6 py-3 rounded-lg font-medium";
+                if (hasAnswered) {
+                    classes += ' disabled';
+                    if (option === q.correct) {
+                        classes += ' correct';
+                    } else if (option === userAnswers[currentQuestionIndex]) {
+                        classes += ' incorrect';
+                    }
+                }
+                optionsHTML += `<button class="${classes}" data-answer-text="${option}">${option}</button>`;
+            });
+
+            let feedbackHTML = '';
+            if (hasAnswered) {
+                const isCorrect = userAnswers[currentQuestionIndex] === q.correct;
+                const colorClass = isCorrect ? 'text-green-800 dark:text-green-400' : 'text-red-800 dark:text-red-400';
+                const icon = isCorrect ? '✔️' : '❌';
+                feedbackHTML = `<p class="${colorClass}">${icon} ${q.explanation}</p>`;
+            }
+
+            questionElement.innerHTML = `
+                <h4 class="text-xl font-bold mb-6">${q.question}</h4>
+                <div class="options-container space-y-3">${optionsHTML}</div>
+                <div class="mt-4 text-center font-bold">${feedbackHTML}</div>
+            `;
+            quizContainer.appendChild(questionElement);
+
+            if (!hasAnswered) {
+                document.querySelectorAll('.option-btn').forEach(btn => {
+                    btn.addEventListener('click', checkAnswer);
+                });
+            }
+
+            renderNavigationButtons();
+            window.scrollTo(0, quizSection.offsetTop);
+        }
+
+        function checkAnswer(event) {
+            const selectedOptionText = event.currentTarget.getAttribute('data-answer-text');
+            userAnswers[currentQuestionIndex] = selectedOptionText;
+            renderQuestion();
+        }
+
+        function renderNavigationButtons() {
+            const hasAnswered = userAnswers[currentQuestionIndex] !== null;
+            const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
+
+            const backButton = document.createElement('button');
+            backButton.innerHTML = `<i class="fas fa-arrow-left mr-2"></i> Voltar`;
+            backButton.className = "inline-flex items-center justify-center px-6 py-2 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-gray-50 hover:bg-gray-200 dark:bg-gray-600 dark:text-gray-100 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors";
+            backButton.style.visibility = currentQuestionIndex > 0 ? 'visible' : 'hidden';
+            backButton.onclick = () => {
+                currentQuestionIndex--;
+                renderQuestion();
+            };
+
+            const nextButton = document.createElement('button');
+            nextButton.innerHTML = isLastQuestion ? `Finalizar <i class="fas fa-check-circle ml-2"></i>` : `Avançar <i class="fas fa-arrow-right ml-2"></i>`;
+            nextButton.className = "inline-flex items-center justify-center px-6 py-2 border border-transparent text-base font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 transition-colors";
+            nextButton.disabled = !hasAnswered;
+            nextButton.onclick = () => {
+                if (isLastQuestion) {
+                    showResults();
+                } else {
+                    currentQuestionIndex++;
+                    renderQuestion();
+                }
+            };
+            
+            quizNavigation.appendChild(backButton);
+            quizNavigation.appendChild(nextButton);
+        }
+
+        function showResults() {
+            calculateScore();
+            const scoreDisplay = document.getElementById('score-display');
+            const balanceMessage = document.getElementById('balance-message');
+
+            quizSection.classList.add('hidden');
+            resultsSection.classList.remove('hidden');
+
+            const percentage = (score / totalQuestions) * 100;
+            scoreDisplay.textContent = `${score} / ${totalQuestions}`;
+            scoreDisplay.classList.remove('text-green-600', 'text-yellow-600', 'text-red-600');
+
+            if (percentage === 100) {
+                balanceMessage.textContent = 'Parabéns! Você demonstrou total domínio sobre Capacitação. Excelente trabalho!';
+                scoreDisplay.classList.add('text-green-600');
+            } else if (percentage >= 75) {
+                balanceMessage.textContent = 'Ótimo resultado! Você absorveu a maior parte do conteúdo. Continue se aprimorando!';
+                scoreDisplay.classList.add('text-yellow-600');
+            } else {
+                balanceMessage.textContent = 'Você demonstrou conhecimento, mas pode revisar os módulos para reforçar os conceitos. Lembre-se, o sucesso está no aprendizado contínuo!';
+                scoreDisplay.classList.add('text-red-600');
+            }
+            window.scrollTo(0, resultsSection.offsetTop);
         }
 
         
-        function updateActiveTabProgress() {
-            const scrollTop = window.scrollY;
-            const windowHeight = window.innerHeight;
-            const docHeight = document.documentElement.scrollHeight;
-            const totalScrollable = docHeight - windowHeight;
-            const currentScrollPercent = totalScrollable > 0 ? (scrollTop / totalScrollable) * 100 : 100;
-            const progressToShow = Math.min(currentScrollPercent, 100);
 
+        function switchTab(clickedTabId) {
+            tabButtons.forEach(button => button.classList.remove('active-tab'));
+            if (clickedTabId === 'wellness-tab') {
+                document.getElementById('wellness-tab').classList.add('active-tab');
+                readingPanel.classList.add('hidden');
+                wellnessPanel.classList.remove('hidden');
+            } else {
+                document.getElementById('reading-tab').classList.add('active-tab');
+                wellnessPanel.classList.add('hidden');
+                readingPanel.classList.remove('hidden');
+            }
+            window.scrollTo(0, 0);
+        }
+
+        function updateActiveTabProgress() {
+            const scrollPosition = window.scrollY;
+            const clientHeight = document.documentElement.clientHeight;
+            // Corrigido para verificar o trainingSection
+            const trainingContainer = document.getElementById('training-section');
+            if (!trainingContainer) return; 
+
+            const trainingHeight = trainingContainer.offsetHeight;
+            const trainingScrollTop = scrollPosition - trainingContainer.offsetTop;
             
+            // Evita divisão por zero se a altura for menor que a do cliente
+            const maxTrainingScroll = (trainingHeight > clientHeight) ? (trainingHeight - clientHeight) : 1;
+            
+            const progressInTraining = Math.min(Math.max(0, trainingScrollTop) / maxTrainingScroll, 1) * 100;
+
             if (!readingPanel.classList.contains('hidden')) {
-                progressBarReading.style.width = progressToShow + '%';
-            } 
-            else if (!wellnessPanel.classList.contains('hidden') && !isQuizUnlocked) {
-                progressBarWellness.style.width = progressToShow + '%';
-                
-                
-                if (progressToShow >= 95) {
+                progressBarReading.style.width = Math.min(progressInTraining, 100) + '%';
+            } else if (!wellnessPanel.classList.contains('hidden') && !isQuizUnlocked) {
+                progressBarWellness.style.width = Math.min(progressInTraining, 100) + '%';
+                if (Math.min(progressInTraining, 100) >= 95) { // Libera o quiz com 95% de scroll
                     isQuizUnlocked = true;
-                    
                     startQuizBtn.disabled = false;
                     startQuizBtn.textContent = 'Estou pronto para o teste!';
                     startQuizBtn.classList.add('bg-green-600', 'hover:bg-green-700');
@@ -205,26 +446,19 @@
 
         
 
-        
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => switchTab(button.id));
-        });
-        
-        
-        nextToWellnessBtn.addEventListener('click', () => {
-            switchTab('wellness-tab');
-        });
-
-        
+        tabButtons.forEach(button => button.addEventListener('click', () => switchTab(button.id)));
+        nextToWellnessBtn.addEventListener('click', () => switchTab('wellness-tab'));
         startQuizBtn.addEventListener('click', () => {
             if (isQuizUnlocked) {
                 trainingSection.classList.add('hidden');
                 quizSection.classList.remove('hidden');
-                
+                currentQuestionIndex = 0;
+                userAnswers.fill(null);
+                score = 0;
+                renderQuestion();
             }
         });
 
-        
         function throttle(func, limit) {
             let inThrottle;
             return function(...args) {
@@ -237,11 +471,16 @@
         }
         window.addEventListener('scroll', throttle(updateActiveTabProgress, 100));
 
-        
         const backLink = document.getElementById('back-to-dashboard-link');
         if (backLink) {
             const userRole = localStorage.getItem('userRole');
             backLink.href = (userRole === 'Empresa') ? "Empresa.html" : "painel.html";
+        }
+
+        const finishTrainingLink = document.getElementById('finish-training-link');
+        if (finishTrainingLink) {
+            const userRole = localStorage.getItem('userRole');
+            finishTrainingLink.href = (userRole === 'Empresa') ? "Empresa.html" : "painel.html";
         }
     });
     </script>
